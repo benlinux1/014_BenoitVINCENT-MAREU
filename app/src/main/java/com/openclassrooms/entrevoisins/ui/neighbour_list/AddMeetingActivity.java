@@ -63,7 +63,8 @@ public class AddMeetingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getMeetingApiService();
-        init();
+        setMeetingColor();
+        initForm();
 
         mFirstGroup = (RadioGroup) findViewById(R.id.radioGroup_1_to_5);
         mSecondGroup = (RadioGroup) findViewById(R.id.radioGroup_6_to_10);
@@ -104,10 +105,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void init() {
-        mAvatarColor = randomColor();
-        Glide.with(this).load(mAvatarColor).placeholder(R.drawable.ic_account)
-                .apply(RequestOptions.circleCropTransform()).into(avatar);
+    private void initForm() {
         subjectInput.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -118,6 +116,11 @@ public class AddMeetingActivity extends AppCompatActivity {
                 addButton.setEnabled(s.length() > 0);
             }
         });
+    }
+
+    private void setMeetingColor() {
+        mAvatarColor = randomColor();
+        avatar.setColorFilter(Color.parseColor(mAvatarColor));
     }
 
     @OnClick(R.id.create)
@@ -137,7 +140,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     /**
-     * Generate a random image. Useful to mock image picker
+     * Generate a random color
      * @return String
      */
     public String randomColor() {
