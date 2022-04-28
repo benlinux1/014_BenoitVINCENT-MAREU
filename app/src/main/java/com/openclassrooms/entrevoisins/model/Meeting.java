@@ -34,23 +34,23 @@ public class Meeting {
     /**
      * Constructor
      * @param id
-     * @param roomName
+     * @param subject
      * @param avatarColor
      * @param mDate
-     * @param isFree
+     * @param roomName
+     * @param participants
+     * @param description
      */
 
     public Meeting(long id, String subject, String avatarColor,
-                   String mDate, String roomName, String participants, String description, boolean isFree) {
+                   String mDate, String roomName, String participants, String description) {
         this.id = id;
-        this.avatarColor = avatarColor;
         this.subject = subject;
+        this.avatarColor = avatarColor;
         this.mDate = mDate;
-        this.participants = participants;
         this.roomName = roomName;
+        this.participants = participants;
         this.description = description;
-
-        this.isFree = isFree;
     }
 
 

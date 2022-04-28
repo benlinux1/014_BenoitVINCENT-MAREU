@@ -63,9 +63,26 @@ public class AddMeetingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getMeetingApiService();
+        checkIfRoomIsChecked();
         setMeetingColor();
         initForm();
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home : {
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Radio Group (1 & 2) listener to check if meeting room is selected
+     */
+    private void checkIfRoomIsChecked() {
         mFirstGroup = (RadioGroup) findViewById(R.id.radioGroup_1_to_5);
         mSecondGroup = (RadioGroup) findViewById(R.id.radioGroup_6_to_10);
 
@@ -94,17 +111,9 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home : {
-                finish();
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Text changed listener to set enabled the creation button
+     */
     private void initForm() {
         subjectInput.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -118,25 +127,31 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Set a random meeting color
+     */
     private void setMeetingColor() {
         mAvatarColor = randomColor();
         avatar.setColorFilter(Color.parseColor(mAvatarColor));
     }
 
-    @OnClick(R.id.create)
-    void addMeeting() {
-        Meeting meeting = new Meeting(
-                System.currentTimeMillis(),
-                subjectInput.getEditText().getText().toString(),
-                dateInput.getEditText().getText().toString(),
-                mAvatarColor,
-                participantsInput.getEditText().getText().toString(),
-                participantsInput.getEditText().getText().toString(),
-                descriptionInput.getEditText().getText().toString(),
-                true
-        );
-        mApiService.createMeeting(meeting);
-        finish();
+    /**
+     * Used to get the room name checked in the list
+     */
+    private String getRoomValue() {
+        int selectedRadioButtonIDinGroup1 = mFirstGroup.getCheckedRadioButtonId();
+        int selectedRadioButtonIDinGroup2 = mSecondGroup.getCheckedRadioButtonId();
+
+        // If nothing is selected from Radio Group, then it return -1
+        if (selectedRadioButtonIDinGroup1 != -1) {
+            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup1);
+            String selectedRadioButtonText1 = selectedRadioButton.getText().toString();
+            return selectedRadioButtonText1;
+        } else { // it means that button is checked in Group 2
+            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup2);
+            String selectedRadioButtonText2 = selectedRadioButton.getText().toString();
+            return selectedRadioButtonText2;
+        }
     }
 
     /**
@@ -150,6 +165,26 @@ public class AddMeetingActivity extends AppCompatActivity {
         // format it as hexadecimal string and print
         String colorCode = String.format("#%06x", rand_num);
         return colorCode;
+    }
+
+
+    /**
+     * Send form values to create a new meeting
+     * @return String
+     */
+    @OnClick(R.id.create)
+    void addMeeting() {
+        Meeting meeting = new Meeting(
+                System.currentTimeMillis(),
+                subjectInput.getEditText().getText().toString(),
+                mAvatarColor,
+                dateInput.getEditText().getText().toString(),
+                getRoomValue(),
+                participantsInput.getEditText().getText().toString(),
+                descriptionInput.getEditText().getText().toString()
+        );
+        mApiService.createMeeting(meeting);
+        finish();
     }
 
     /**
