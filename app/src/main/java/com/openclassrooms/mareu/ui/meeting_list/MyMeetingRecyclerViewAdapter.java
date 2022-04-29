@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.ui.neighbour_list;
+package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.openclassrooms.entrevoisins.R;
-import com.openclassrooms.entrevoisins.events.DeleteMeetingEvent;
-import com.openclassrooms.entrevoisins.model.Meeting;
+import com.openclassrooms.mareu.R;
+import com.openclassrooms.mareu.events.DeleteMeetingEvent;
+import com.openclassrooms.mareu.model.Meeting;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.openclassrooms.entrevoisins.service;
+package com.openclassrooms.mareu.service;
 
-import com.openclassrooms.entrevoisins.model.Meeting;
+import com.openclassrooms.mareu.model.Meeting;
 
 import java.util.ArrayList;
 import java.util.List;

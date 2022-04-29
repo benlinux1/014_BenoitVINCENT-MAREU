@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.model;
+package com.openclassrooms.mareu.model;
 
 import java.util.Objects;
 

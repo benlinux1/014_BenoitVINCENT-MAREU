@@ -1,6 +1,6 @@
-package com.openclassrooms.entrevoisins.events;
+package com.openclassrooms.mareu.events;
 
-import com.openclassrooms.entrevoisins.model.Meeting;
+import com.openclassrooms.mareu.model.Meeting;
 
 /**
  * Event fired when a user deletes a Neighbour

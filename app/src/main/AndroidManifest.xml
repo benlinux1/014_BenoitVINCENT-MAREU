@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.openclassrooms.entrevoisins">
+    package="com.openclassrooms.mareu">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,13 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.neighbour_list.MeetingDetailsActivity"
+            android:name=".ui.meeting_list.MeetingDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.neighbour_list.AddMeetingActivity"
+            android:name=".ui.meeting_list.AddMeetingActivity"
             android:label="@string/activity_new_meeting" />
         <activity
-            android:name=".ui.neighbour_list.ListMeetingActivity"
+            android:name=".ui.meeting_list.ListMeetingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

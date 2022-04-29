@@ -1,9 +1,9 @@
-package com.openclassrooms.entrevoisins.utils;
+package com.openclassrooms.mareu.utils;
 
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.view.View;
-import com.openclassrooms.entrevoisins.R;
+import com.openclassrooms.mareu.R;
 import org.hamcrest.Matcher;
 
 public class DeleteViewAction implements ViewAction {

@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.ui.neighbour_list;
+package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,14 +17,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.openclassrooms.entrevoisins.R;
-import com.openclassrooms.entrevoisins.di.DI;
-import com.openclassrooms.entrevoisins.model.Meeting;
-import com.openclassrooms.entrevoisins.service.MeetingApiService;
+import com.openclassrooms.mareu.R;
+import com.openclassrooms.mareu.di.DI;
+import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.service.MeetingApiService;
 
 public class MeetingDetailsActivity extends AppCompatActivity {
 
-    private FloatingActionButton mUpdateButton;
+    private FloatingActionButton mDeleteButton;
     private ImageView mMeetingColor;
     private TextView mMeetingSubtitle;
     private TextView mMeetingDate;
@@ -50,7 +50,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
          * Listener on Favorite's Button to add/remove neighbour in/from Favorites List
          * Modify the favorite's button design (empty / full) according to the situation too
          */
-        mUpdateButton.setOnClickListener(new View.OnClickListener() {
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
 
             /**
              * Toggle neighbour's favorite attribute
@@ -59,9 +59,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
              * */
             @Override
             public void onClick(View view) {
-                mApiService.toggleFree(meeting);
-                mUpdateButton.setImageResource(meeting.isFree()?R.drawable.ic_star_yellow_24 : R.drawable.ic_favorite_empty);
-                createCustomDialogBox(meeting.isFree()? meeting.getRoomName() + " a été ajouté(e) à vos favoris" : meeting.getRoomName() + " a été supprimé(e) de vos favoris");
+                createCustomDialogBox(" Voulez vous vraiement supprimer cette réunion ?");
             }
        });
     }
@@ -89,7 +87,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         getViews();
         setMeetingColor(meeting);
         setMeetingInfo(meeting);
-        setUpdateButton(meeting);
+        setDeleteButton(meeting);
 
         return meeting;
     }
@@ -118,10 +116,10 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingDescription.setText(meeting.getDescription());
     };
 
-    public void setUpdateButton(Meeting meeting) {
-        mUpdateButton = findViewById(R.id.meeting_detail_update_button);
+    public void setDeleteButton(Meeting meeting) {
+        mDeleteButton = findViewById(R.id.meeting_detail_update_button);
         // Set Favorite Button color according to the situation
-        mUpdateButton.setImageResource(meeting.isFree() ? R.drawable.ic_star_yellow_24 : R.drawable.ic_favorite_empty);
+
 
     }
 
@@ -133,9 +131,17 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         AlertDialog.Builder builder
                 = new AlertDialog
                 .Builder(MeetingDetailsActivity.this);
-        builder.setCancelable(true);
+        builder.setCancelable(false);
         builder.setMessage(message);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+        builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

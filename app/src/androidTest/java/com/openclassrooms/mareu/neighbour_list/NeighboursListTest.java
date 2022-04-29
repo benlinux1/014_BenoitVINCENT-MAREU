@@ -1,19 +1,17 @@
 
-package com.openclassrooms.entrevoisins.neighbour_list;
+package com.openclassrooms.mareu.meeting_list;
 
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.openclassrooms.entrevoisins.R;
-import com.openclassrooms.entrevoisins.di.DI;
-import com.openclassrooms.entrevoisins.model.Meeting;
-import com.openclassrooms.entrevoisins.ui.neighbour_list.ListMeetingActivity;
-import com.openclassrooms.entrevoisins.utils.DeleteViewAction;
+import com.openclassrooms.mareu.R;
+import com.openclassrooms.mareu.di.DI;
+import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.ui.meeting_list.ListMeetingActivity;
+import com.openclassrooms.mareu.utils.DeleteViewAction;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,11 +23,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.openclassrooms.entrevoisins.utils.RecyclerViewItemCountAssertion.withItemCount;
+import static com.openclassrooms.mareu.utils.RecyclerViewItemCountAssertion.withItemCount;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 
@@ -102,8 +99,8 @@ public class NeighboursListTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(4, click()));
         // Check if neighbour's data is displayed on his profile's page
         Meeting meetingPosition = DI.getMeetingApiService().getMeetings().get(4);
-        onView(withId(R.id.meeting_detail_room_title)).check(matches(withText(meetingPosition.getRoomName())));
-        onView(withId(R.id.meeting_detail_location_room)).check(matches(withText(meetingPosition.getRoomLetter())));
+        onView(withId(R.id.meeting_detail_location_room)).check(matches(withText(meetingPosition.getRoomName())));
+        onView(withId(R.id.meeting_detail_second_title)).check(matches(withText(meetingPosition.getSubject())));
         onView(withId(R.id.meeting_detail_date)).check(matches(withText(meetingPosition.getDate())));
     }
 

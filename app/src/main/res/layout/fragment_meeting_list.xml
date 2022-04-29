@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_meetings"
-    android:name="com.openclassrooms.entrevoisins.ui.neighbour_list.NeighbourFragment"
+    android:name="com.openclassrooms.mareu.ui.meeting_list.MeetingFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.neighbour_list.MeetingFragment"
+    tools:context=".ui.MeetingFragment"
     tools:listitem="@layout/fragment_meeting" />

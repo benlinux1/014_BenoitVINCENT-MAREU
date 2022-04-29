@@ -1,7 +1,7 @@
-package com.openclassrooms.entrevoisins.service;
+package com.openclassrooms.mareu.service;
 
-import com.openclassrooms.entrevoisins.di.DI;
-import com.openclassrooms.entrevoisins.model.Meeting;
+import com.openclassrooms.mareu.di.DI;
+import com.openclassrooms.mareu.model.Meeting;
 
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class NeighbourServiceTest {
     @Test
     public void addMeetingWithSuccess() {
         // New meeting data
-        Meeting createdMeeting = new Meeting( (long) service.getMeetings().size(), "Z", "#FF80AB", "01/01/2023", "14:00", "Harry Potter", "abc@testmail.com", true );
+        Meeting createdMeeting = new Meeting( (long) service.getMeetings().size(), "Fake subject", "#FF80AB", "01/01/2023", "Secret Room", "Harry Potter", "abc@testmail.com" );
         // Call method to create meeting in API Service
         service.createMeeting(createdMeeting);
         // Check if created meeting is in the list

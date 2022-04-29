@@ -1,7 +1,7 @@
-package com.openclassrooms.entrevoisins.di;
+package com.openclassrooms.mareu.di;
 
-import com.openclassrooms.entrevoisins.service.DummyMeetingApiService;
-import com.openclassrooms.entrevoisins.service.MeetingApiService;
+import com.openclassrooms.mareu.service.DummyMeetingApiService;
+import com.openclassrooms.mareu.service.MeetingApiService;
 
 /**
  * Dependency injector to get instance of services

@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.ui.neighbour_list;
+package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,10 +18,10 @@ import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.openclassrooms.entrevoisins.R;
-import com.openclassrooms.entrevoisins.di.DI;
-import com.openclassrooms.entrevoisins.model.Meeting;
-import com.openclassrooms.entrevoisins.service.MeetingApiService;
+import com.openclassrooms.mareu.R;
+import com.openclassrooms.mareu.di.DI;
+import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.service.MeetingApiService;
 
 import java.util.Random;
 

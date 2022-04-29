@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.ui.neighbour_list;
+package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.openclassrooms.entrevoisins.R;
-import com.openclassrooms.entrevoisins.di.DI;
-import com.openclassrooms.entrevoisins.events.DeleteMeetingEvent;
-import com.openclassrooms.entrevoisins.model.Meeting;
-import com.openclassrooms.entrevoisins.service.MeetingApiService;
+import com.openclassrooms.mareu.R;
+import com.openclassrooms.mareu.di.DI;
+import com.openclassrooms.mareu.events.DeleteMeetingEvent;
+import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.service.MeetingApiService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

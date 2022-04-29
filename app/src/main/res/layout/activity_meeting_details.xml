@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBEFF0"
-    tools:context="com.openclassrooms.entrevoisins.ui.neighbour_list.MeetingDetailsActivity">
+    tools:context="com.openclassrooms.mareu.ui.meeting_list.MeetingDetailsActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             app:backgroundTint="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_favorite_empty" />
+            app:srcCompat="@drawable/ic_delete_white_24dp" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/meeting_details_information_section"

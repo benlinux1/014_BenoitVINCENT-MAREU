@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.ui.neighbour_list;
+package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.openclassrooms.entrevoisins.R;
+import com.openclassrooms.mareu.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
