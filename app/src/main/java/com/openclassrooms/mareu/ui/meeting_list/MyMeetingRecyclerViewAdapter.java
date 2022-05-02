@@ -43,8 +43,8 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Meeting meeting = mMeetings.get(position);
-        holder.mMeetingSubject.setText(meeting.getSubject() + "   -");
-        holder.mMeetingDate.setText(meeting.getDate() + "   -");
+        holder.mMeetingSubject.setText(meeting.getSubject() + " -");
+        holder.mMeetingDate.setText(meeting.getDate() + " -");
         holder.mMeetingRoom.setText(meeting.getRoomName());
         holder.mMeetingParticipants.setText(meeting.getParticipants());
         holder.mMeetingAvatar.setColorFilter(Color.parseColor(meeting.getAvatarColor()));

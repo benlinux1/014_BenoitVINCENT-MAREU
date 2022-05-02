@@ -30,7 +30,7 @@
         android:id="@+id/item_list_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/item_list_subject"
         app:layout_constraintTop_toTopOf="@id/item_list_avatar"
@@ -38,13 +38,16 @@
 
     <TextView
         android:id="@+id/item_list_room"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:textStyle="bold"
+        android:ellipsize="end"
+        android:singleLine="true"
         app:layout_constraintStart_toEndOf="@id/item_list_date"
         app:layout_constraintTop_toTopOf="@id/item_list_avatar"
-        tools:text="Room" />
+        app:layout_constraintEnd_toStartOf="@id/item_list_delete_button"
+        tools:text="Room Name" />
 
     <TextView
         android:id="@+id/item_list_participants"
@@ -53,8 +56,8 @@
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
-        android:lines="1"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@id/item_list_delete_button"
         app:layout_constraintStart_toEndOf="@id/item_list_avatar"
         app:layout_constraintTop_toBottomOf="@id/item_list_room"
         tools:text="@string/meeting_members" />
@@ -64,7 +67,7 @@
         android:id="@+id/item_list_delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
