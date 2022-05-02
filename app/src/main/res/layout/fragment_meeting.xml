@@ -47,7 +47,7 @@
         app:layout_constraintStart_toEndOf="@id/item_list_date"
         app:layout_constraintTop_toTopOf="@id/item_list_avatar"
         app:layout_constraintEnd_toStartOf="@id/item_list_delete_button"
-        tools:text="Room Name" />
+        tools:text="@string/meeting_room_name" />
 
     <TextView
         android:id="@+id/item_list_participants"

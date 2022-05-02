@@ -46,6 +46,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     @BindView(R.id.radioButton_room1)
     RadioButton room1Button;
 
+
     private MeetingApiService mApiService;
     private String mAvatarColor;
 
