@@ -11,7 +11,8 @@
     <string name="choose_meeting_location">Choississez votre salle de réunion :</string>
     <string name="meeting_location">Meeting Room</string>
     <string name="meeting_room_name">Room name</string>
-    <string name="meeting_members">Liste des participants</string>
+    <string name="add_member_title">E-mail des participants :</string>
+    <string name="add_member">Ajoutez un participant (email)</string>
     <string name="meeting_description_title">Ordre du jour</string>
     <string name="meeting_description_text">Décrivez en quelques mots l\'ordre du jour</string>
     <string name="meeting_detail_update_button">+</string>
