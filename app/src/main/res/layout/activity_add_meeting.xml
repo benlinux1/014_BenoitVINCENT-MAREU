@@ -176,6 +176,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:imeOptions="actionSend"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
@@ -187,7 +188,8 @@
                         android:ems="10"
                         android:maxLines="1"
                         android:hint="@string/add_member"
-                        android:inputType="text"
+                        android:imeOptions="actionSend"
+                        android:inputType="textEmailAddress"
                         android:drawableStart="@drawable/ic_person_add_white_24dp"
                         android:drawableTint="@color/colorAccent"
                         android:drawablePadding="12dp"

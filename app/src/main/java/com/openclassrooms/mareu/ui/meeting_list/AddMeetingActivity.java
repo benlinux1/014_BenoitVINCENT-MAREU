@@ -10,19 +10,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -39,23 +43,24 @@ public class AddMeetingActivity extends AppCompatActivity {
     TextInputLayout subjectInput;
     @BindView(R.id.add_participants_layout)
     TextInputLayout participantsInput;
+    @BindView(R.id.participants_list_title)
+    TextView participantsListTitle;
+    @BindView(R.id.participants_list_text)
+    TextView participantsList;
     @BindView(R.id.add_description_layout)
     TextInputLayout descriptionInput;
-    @BindView(R.id.create)
-    MaterialButton addButton;
     @BindView(R.id.radioButton_room1)
     RadioButton room1Button;
-
+    @BindView(R.id.create)
+    MaterialButton addButton;
 
     private MeetingApiService mApiService;
     private String mAvatarColor;
-
     private RadioGroup mFirstGroup;
     private RadioGroup mSecondGroup;
-
     private boolean isChecking = true;
     private int mCheckedId = R.id.radioButton_room1;
-
+    private List<String> participants = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +71,8 @@ public class AddMeetingActivity extends AppCompatActivity {
         mApiService = DI.getMeetingApiService();
         checkIfRoomIsChecked();
         setMeetingColor();
-        initForm();
+        checkIfSubjectIsValid();
+        checkIfEmailIsValid();
     }
 
     @Override
@@ -113,20 +119,67 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     /**
-     * Text changed listener to set enabled the creation button
+     * Subject Text changed listener to set enabled the creation button
      */
-    private void initForm() {
+    private void checkIfSubjectIsValid() {
         subjectInput.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!validateSubject(s.toString())) {
+                    subjectInput.setError("Le sujet doit comporter au moins 3 caractères");
+                }
+            }
+        });
+    }
+
+    public static boolean validateSubject(String subject) {
+        String subjectRegex = "^[A-Za-z ]*$";
+        if (subject.matches(subjectRegex) && (subject != null) && (subject.trim().length() > 2))  {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void checkIfEmailIsValid() {
+        participantsInput.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
             @Override
             public void afterTextChanged(Editable s) {
-                addButton.setEnabled(s.length() > 0);
+                if (validateEmail(s.toString())) {
+                    participants.add(s.toString());
+                    showParticipantsList();
+                    participantsInput.getEditText().getText().clear();
+                    participantsListTitle.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
+
+    public void showParticipantsList(){
+        participantsList.setVisibility(View.VISIBLE);
+        String mails = "";
+        for (String mail: participants){ mails += mail+"\n";}
+        participantsList.setText(mails);
+    }
+
+    public static boolean validateEmail(String email) {
+        String emailRegex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        if (email.matches(emailRegex) && (email != null) && (email.trim().length() > 6))  {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * Set a random meeting color
@@ -167,7 +220,6 @@ public class AddMeetingActivity extends AppCompatActivity {
         String colorCode = String.format("#%06x", rand_num);
         return colorCode;
     }
-
 
     /**
      * Send form values to create a new meeting
