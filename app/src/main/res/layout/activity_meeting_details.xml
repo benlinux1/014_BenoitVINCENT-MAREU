@@ -32,7 +32,7 @@
             app:backgroundTint="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_delete_white_24dp" />
+            app:srcCompat="@drawable/ic_baseline_edit_24" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/meeting_details_information_section"

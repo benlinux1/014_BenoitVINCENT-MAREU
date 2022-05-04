@@ -1,5 +1,6 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -59,7 +60,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
              * */
             @Override
             public void onClick(View view) {
-                createCustomDialogBox(" Voulez vous vraiement supprimer cette réunion ?");
+                createCustomDialogBox(" Voulez vous vraiment modifier cette réunion ?");
             }
        });
     }
@@ -108,10 +109,11 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                 .into(mMeetingColor);
     }
 
+    @SuppressLint("SetTextI18n")
     public void setMeetingInfo(Meeting meeting) {
         mMeetingSubtitle.setText(meeting.getSubject());
         mMeetingDate.setText(meeting.getDate());
-        mMeetingRoom.setText("Salle " + meeting.getRoomName());
+        mMeetingRoom.setText("Salle " + "\" " + meeting.getRoomName() + " \"");
         mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         mMeetingDescription.setText(meeting.getDescription());
     };
@@ -155,6 +157,15 @@ public class MeetingDetailsActivity extends AppCompatActivity {
 
         // Center DialogBox Button
         Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params.setMargins(40,0,0,0);
+        positiveButton.setLayoutParams(params);
+
         LinearLayout parent = (LinearLayout) positiveButton.getParent();
         parent.setGravity(Gravity.CENTER_HORIZONTAL);
         View leftSpacer = parent.getChildAt(1);
