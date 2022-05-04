@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.meeting_list.UpdateMeetingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.meeting_list.MeetingDetailsActivity"
             android:exported="false" />
         <activity

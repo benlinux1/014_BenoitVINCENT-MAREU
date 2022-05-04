@@ -116,7 +116,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingRoom.setText("Salle " + "\" " + meeting.getRoomName() + " \"");
         mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         mMeetingDescription.setText(meeting.getDescription());
-    };
+    }
 
     public void setDeleteButton(Meeting meeting) {
         mDeleteButton = findViewById(R.id.meeting_detail_update_button);
@@ -139,7 +139,10 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                Meeting meeting = setMeetingData();
+                Intent updateMeetingActivityIntent = new Intent(MeetingDetailsActivity.this, UpdateMeetingActivity.class);
+                updateMeetingActivityIntent.putExtra("MEETING_ID", meeting.getId());
+                MeetingDetailsActivity.this.startActivity(updateMeetingActivityIntent);
             }
         });
 
