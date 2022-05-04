@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -40,9 +41,13 @@ public class AddMeetingActivity extends AppCompatActivity {
     @BindView(R.id.add_date_layout)
     TextInputLayout dateInput;
     @BindView(R.id.add_subject_layout)
-    TextInputLayout subjectInput;
+    TextInputLayout subjectLayout;
+    @BindView(R.id.add_subject_input)
+    EditText subject;
     @BindView(R.id.add_participants_layout)
-    TextInputLayout participantsInput;
+    TextInputLayout participantsLayout;
+    @BindView(R.id.add_participants_input)
+    EditText participantInput;
     @BindView(R.id.participants_list_title)
     TextView participantsListTitle;
     @BindView(R.id.participants_list_text)
@@ -71,8 +76,8 @@ public class AddMeetingActivity extends AppCompatActivity {
         mApiService = DI.getMeetingApiService();
         checkIfRoomIsChecked();
         setMeetingColor();
-        checkIfSubjectIsValid();
-        checkIfEmailIsValid();
+        checkIfSubjectIsValid(subjectLayout, subject, addButton);
+        checkIfEmailIsValid(participantsLayout, participantInput, addButton);
     }
 
     @Override
@@ -119,67 +124,95 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     /**
-     * Subject Text changed listener to set enabled the creation button
+     * Subject Text changed listener to validate field & set enabled the creation button
      */
-    private void checkIfSubjectIsValid() {
-        subjectInput.getEditText().addTextChangedListener(new TextWatcher() {
+    private void checkIfSubjectIsValid(TextInputLayout subjectInputLayout, EditText subjectEditText, MaterialButton actionButton) {
+        subjectInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                actionButton.setEnabled(false);
+            }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                if (!validateSubject(s.toString())) {
-                    subjectInput.setError("Le sujet doit comporter au moins 3 caractères");
-                }
+                subjectEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN)  {
+                            validateSubject(s.toString(), subjectInputLayout);
+                            if (validateSubject(s.toString(), subjectInputLayout)) {
+                                actionButton.setEnabled(true);
+                            }
+                        }
+                        return false;
+                    }
+                });
             }
         });
     }
 
-    public static boolean validateSubject(String subject) {
+    public static boolean validateSubject(String subject, TextInputLayout subjectError) {
         String subjectRegex = "^[A-Za-z ]*$";
-        if (subject.matches(subjectRegex) && (subject != null) && (subject.trim().length() > 2))  {
+        if (subject.matches(subjectRegex) && (subject.trim().length() > 2))  {
             return true;
         } else {
+            subjectError.setError("Le sujet doit comporter au minimum 3 caractères");
             return false;
         }
     }
 
-    private void checkIfEmailIsValid() {
-        participantsInput.getEditText().addTextChangedListener(new TextWatcher() {
+    private void checkIfEmailIsValid(TextInputLayout mailInputLayout, EditText mailEditText, MaterialButton actionButton) {
+        mailInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                actionButton.setEnabled(false);
+            }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
             @Override
             public void afterTextChanged(Editable s) {
-                if (validateEmail(s.toString())) {
-                    participants.add(s.toString());
-                    showParticipantsList();
-                    participantsInput.getEditText().getText().clear();
-                    participantsListTitle.setVisibility(View.VISIBLE);
-                }
+                mailEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (validateEmail(s.toString(), mailInputLayout))) {
+                            addParticipant(s.toString());
+                            showParticipantsList();
+                            actionButton.setEnabled(true);
+                        }
+                        return false;
+                    }
+                });
             }
         });
     }
 
-    public void showParticipantsList(){
-        participantsList.setVisibility(View.VISIBLE);
-        String mails = "";
-        for (String mail: participants){ mails += mail+"\n";}
-        participantsList.setText(mails);
+    public void addParticipant(String participant) {
+        participants.add(participant);
+        StringBuilder mails = new StringBuilder();
+        for (String participantMail: participants) {
+            mails.append(participantMail).append("; ");
+        }
+        participantsList.setText(mails.toString());
+        participantInput.getText().clear();
+        participantsLayout.setError(null);
     }
 
-    public static boolean validateEmail(String email) {
+    public void showParticipantsList() {
+        participantsListTitle.setVisibility(View.VISIBLE);
+        participantsList.setVisibility(View.VISIBLE);
+    }
+
+    public static boolean validateEmail(String email, TextInputLayout inputError) {
         String emailRegex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        if (email.matches(emailRegex) && (email != null) && (email.trim().length() > 6))  {
+        if (email.matches(emailRegex) && (email.trim().length() > 5))  {
             return true;
         } else {
+            inputError.setError("Cette adresse e-mail ne semble pas valide");
             return false;
         }
     }
-
 
     /**
      * Set a random meeting color
@@ -221,23 +254,42 @@ public class AddMeetingActivity extends AppCompatActivity {
         return colorCode;
     }
 
+    private boolean validateAllFields() {
+        if (subjectLayout.getEditText().getText().toString().equals("")) {
+            subjectLayout.setError("Merci de compléter ce champ");
+        }
+        else if (dateInput.getEditText().getText().toString().equals("")) {
+            dateInput.setError("Merci de compléter ce champ");
+        }
+        else if (participantsList.getVisibility() == View.GONE) {
+            participantsLayout.setError("Merci de compléter ce champ");
+        }
+        else if (descriptionInput.getEditText().getText().toString().equals("")) {
+            descriptionInput.setError("Merci de compléter ce champ");
+        } else {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Send form values to create a new meeting
-     * @return String
      */
     @OnClick(R.id.create)
     void addMeeting() {
         Meeting meeting = new Meeting(
                 System.currentTimeMillis(),
-                subjectInput.getEditText().getText().toString(),
+                subjectLayout.getEditText().getText().toString(),
                 mAvatarColor,
                 dateInput.getEditText().getText().toString(),
                 getRoomValue(),
-                participantsInput.getEditText().getText().toString(),
+                participantsList.getText().toString(),
                 descriptionInput.getEditText().getText().toString()
         );
-        mApiService.createMeeting(meeting);
-        finish();
+        if (validateAllFields()) {
+            mApiService.createMeeting(meeting);
+            finish();
+        }
     }
 
     /**

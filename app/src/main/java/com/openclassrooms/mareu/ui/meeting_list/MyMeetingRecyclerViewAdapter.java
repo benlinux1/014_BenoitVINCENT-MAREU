@@ -46,7 +46,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         holder.mMeetingSubject.setText(meeting.getSubject() + " -");
         holder.mMeetingDate.setText(meeting.getDate() + " -");
         holder.mMeetingRoom.setText(meeting.getRoomName());
-        holder.mMeetingParticipants.setText(meeting.getParticipants());
+        holder.mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         holder.mMeetingAvatar.setColorFilter(Color.parseColor(meeting.getAvatarColor()));
 
         // Modify Delete button's action according to Neighbours Page / Favorites Page

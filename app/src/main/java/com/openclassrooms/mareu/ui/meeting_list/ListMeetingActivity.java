@@ -15,8 +15,6 @@ import butterknife.OnClick;
 public class ListMeetingActivity extends AppCompatActivity {
 
     // UI Components
-    @BindView(R.id.tabs)
-    TabLayout mTabLayout;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.container)
@@ -33,9 +31,6 @@ public class ListMeetingActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         mPagerAdapter = new ListMeetingPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
     }
 
     @OnClick(R.id.add_meeting)

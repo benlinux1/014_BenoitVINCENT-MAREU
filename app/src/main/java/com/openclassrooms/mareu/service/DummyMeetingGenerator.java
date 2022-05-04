@@ -20,15 +20,9 @@ public abstract class DummyMeetingGenerator {
             new Meeting(5, "Réunion E", "#3b1680", "30-04-2022, 10h30",
                     "Bowser",  "toad@test.com; maxou@test.com", "Cette réunion portera sur..."),
             new Meeting(6, "Réunion F", "#d56dec", "30-04-2022, 10h30",
-                    "Wario",  "bowser@test.com; koopa@test.com", "Cette réunion portera sur..."),
+                    "Koopa",  "bowser@test.com; ghighi@test.com", "Cette réunion portera sur..."),
             new Meeting(7, "Réunion G", "#cf1142", "02-05-2022, 14h30",
-                    "Yoshi",  "mario@test.com; peach@test.com", "Cette réunion portera sur..."),
-            new Meeting(8, "Réunion H", "#f56f4b", "02-05-2022, 14h30",
-                    "Toadette",  "wario@test.com; yoshi@test.com", "Cette réunion portera sur..."),
-            new Meeting(9, "Réunion I", "#f5f54b", "03-05-2022, 14h30",
-                    "Donkey K.",  "koopa@test.com; wario@test.com", "Cette réunion portera sur..."),
-            new Meeting(10, "Réunion J", "#e425cd", "03-05-2022, 16h30",
-                    "Koopa",  "ghighi@test.com; mario@test.com", "Cette réunion portera sur...")
+                    "Yoshi",  "mario@test.com; peach@test.com", "Cette réunion portera sur...")
     );
 
     static List<Meeting> generateNeighbours() {

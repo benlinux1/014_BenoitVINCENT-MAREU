@@ -112,7 +112,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingSubtitle.setText(meeting.getSubject());
         mMeetingDate.setText(meeting.getDate());
         mMeetingRoom.setText("Salle " + meeting.getRoomName());
-        mMeetingParticipants.setText(meeting.getParticipants());
+        mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         mMeetingDescription.setText(meeting.getDescription());
     };
 
