@@ -217,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginStart="8dp"
-                android:text="@string/add_member_title"
+                android:text="@null"
                 android:textSize="18sp"
                 android:minLines="1"
                 android:textColor="@color/colorAccent"

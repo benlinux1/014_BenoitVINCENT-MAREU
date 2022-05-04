@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -25,10 +24,12 @@ import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
+import com.openclassrooms.mareu.service.ValidationService;
+import com.openclassrooms.mareu.service.ColorService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,7 +93,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     /**
-     * Radio Group (1 & 2) listener to check if meeting room is selected
+     * Radio Group (1 & 2) listener to clear one of them when meeting room is selected
      */
     private void checkIfRoomIsChecked() {
         mFirstGroup = (RadioGroup) findViewById(R.id.radioGroup_1_to_5);
@@ -141,8 +142,8 @@ public class AddMeetingActivity extends AppCompatActivity {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN)  {
-                            validateSubject(s.toString(), subjectInputLayout);
-                            if (validateSubject(s.toString(), subjectInputLayout)) {
+                            ValidationService.validateSubject(s.toString(), subjectInputLayout);
+                            if (ValidationService.validateSubject(s.toString(), subjectInputLayout)) {
                                 actionButton.setEnabled(true);
                             }
                         }
@@ -151,16 +152,6 @@ public class AddMeetingActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    public static boolean validateSubject(String subject, TextInputLayout subjectError) {
-        String subjectRegex = "^[A-Za-z ]*$";
-        if (subject.matches(subjectRegex) && (subject.trim().length() > 2))  {
-            return true;
-        } else {
-            subjectError.setError("Le sujet doit comporter au minimum 3 caractères");
-            return false;
-        }
     }
 
     private void checkIfEmailIsValid(TextInputLayout mailInputLayout, EditText mailEditText, MaterialButton actionButton) {
@@ -176,7 +167,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 mailEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (validateEmail(s.toString(), mailInputLayout))) {
+                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
                             addParticipant(s.toString());
                             showParticipantsList();
                             actionButton.setEnabled(true);
@@ -188,6 +179,9 @@ public class AddMeetingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Add the participant email when added in selected input
+     */
     public void addParticipant(String participant) {
         participants.add(participant);
         StringBuilder mails = new StringBuilder();
@@ -199,26 +193,19 @@ public class AddMeetingActivity extends AppCompatActivity {
         participantsLayout.setError(null);
     }
 
+    /**
+     * Show hidden fields (used when participant is added)
+     */
     public void showParticipantsList() {
         participantsListTitle.setVisibility(View.VISIBLE);
         participantsList.setVisibility(View.VISIBLE);
-    }
-
-    public static boolean validateEmail(String email, TextInputLayout inputError) {
-        String emailRegex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        if (email.matches(emailRegex) && (email.trim().length() > 5))  {
-            return true;
-        } else {
-            inputError.setError("Cette adresse e-mail ne semble pas valide");
-            return false;
-        }
     }
 
     /**
      * Set a random meeting color
      */
     private void setMeetingColor() {
-        mAvatarColor = randomColor();
+        mAvatarColor = ColorService.randomColor();
         avatar.setColorFilter(Color.parseColor(mAvatarColor));
     }
 
@@ -242,51 +229,20 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     /**
-     * Generate a random color
-     * @return String
-     */
-    public String randomColor() {
-        // create object of Random class
-        Random obj = new Random();
-        int rand_num = obj.nextInt(0xffffff + 1);
-        // format it as hexadecimal string and print
-        String colorCode = String.format("#%06x", rand_num);
-        return colorCode;
-    }
-
-    private boolean validateAllFields() {
-        if (subjectLayout.getEditText().getText().toString().equals("")) {
-            subjectLayout.setError("Merci de compléter ce champ");
-        }
-        else if (dateInput.getEditText().getText().toString().equals("")) {
-            dateInput.setError("Merci de compléter ce champ");
-        }
-        else if (participantsList.getVisibility() == View.GONE) {
-            participantsLayout.setError("Merci de compléter ce champ");
-        }
-        else if (descriptionInput.getEditText().getText().toString().equals("")) {
-            descriptionInput.setError("Merci de compléter ce champ");
-        } else {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Send form values to create a new meeting
+     * Send form values to create a new meeting after fields validation
      */
     @OnClick(R.id.create)
     void addMeeting() {
         Meeting meeting = new Meeting(
                 System.currentTimeMillis(),
-                subjectLayout.getEditText().getText().toString(),
+                Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(),
                 mAvatarColor,
-                dateInput.getEditText().getText().toString(),
+                Objects.requireNonNull(dateInput.getEditText()).getText().toString(),
                 getRoomValue(),
                 participantsList.getText().toString(),
-                descriptionInput.getEditText().getText().toString()
+                Objects.requireNonNull(descriptionInput.getEditText()).getText().toString()
         );
-        if (validateAllFields()) {
+        if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInput)) {
             mApiService.createMeeting(meeting);
             finish();
         }
