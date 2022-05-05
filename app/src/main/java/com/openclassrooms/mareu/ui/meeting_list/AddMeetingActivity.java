@@ -75,9 +75,9 @@ public class AddMeetingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getMeetingApiService();
-        checkIfRoomIsChecked();
+        ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
         setMeetingColor();
-        checkIfSubjectIsValid(subjectLayout, subject, addButton);
+        ValidationService.checkIfSubjectIsValid(subjectLayout, subject, addButton);
         checkIfEmailIsValid(participantsLayout, participantInput, addButton);
     }
 
@@ -90,68 +90,6 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Radio Group (1 & 2) listener to clear one of them when meeting room is selected
-     */
-    private void checkIfRoomIsChecked() {
-        mFirstGroup = (RadioGroup) findViewById(R.id.radioGroup_1_to_5);
-        mSecondGroup = (RadioGroup) findViewById(R.id.radioGroup_6_to_10);
-
-        mFirstGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    mSecondGroup.clearCheck();
-                    mCheckedId = checkedId;
-                }
-                isChecking = true;
-            }
-        });
-
-        mSecondGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    mFirstGroup.clearCheck();
-                    mCheckedId = checkedId;
-                }
-                isChecking = true;
-            }
-        });
-    }
-
-    /**
-     * Subject Text changed listener to validate field & set enabled the creation button
-     */
-    private void checkIfSubjectIsValid(TextInputLayout subjectInputLayout, EditText subjectEditText, MaterialButton actionButton) {
-        subjectInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                actionButton.setEnabled(false);
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                subjectEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN)  {
-                            ValidationService.validateSubject(s.toString(), subjectInputLayout);
-                            if (ValidationService.validateSubject(s.toString(), subjectInputLayout)) {
-                                actionButton.setEnabled(true);
-                            }
-                        }
-                        return false;
-                    }
-                });
-            }
-        });
     }
 
     private void checkIfEmailIsValid(TextInputLayout mailInputLayout, EditText mailEditText, MaterialButton actionButton) {
