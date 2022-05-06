@@ -54,7 +54,9 @@ public class AddMeetingActivity extends AppCompatActivity {
     @BindView(R.id.participants_list_text)
     TextView participantsList;
     @BindView(R.id.add_description_layout)
-    TextInputLayout descriptionInput;
+    TextInputLayout descriptionInputLayout;
+    @BindView(R.id.add_description)
+    EditText descriptionInput;
     @BindView(R.id.radioButton_room1)
     RadioButton room1Button;
     @BindView(R.id.create)
@@ -77,8 +79,9 @@ public class AddMeetingActivity extends AppCompatActivity {
         mApiService = DI.getMeetingApiService();
         ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
         setMeetingColor();
-        ValidationService.checkIfSubjectIsValid(subjectLayout, subject, addButton);
+        ValidationService.textInputValidation(subject, subjectLayout, addButton);
         checkIfEmailIsValid(participantsLayout, participantInput, addButton);
+        ValidationService.textInputValidation(descriptionInput, descriptionInputLayout, addButton);
     }
 
     @Override
@@ -178,9 +181,9 @@ public class AddMeetingActivity extends AppCompatActivity {
                 Objects.requireNonNull(dateInput.getEditText()).getText().toString(),
                 getRoomValue(),
                 participantsList.getText().toString(),
-                Objects.requireNonNull(descriptionInput.getEditText()).getText().toString()
+                Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString()
         );
-        if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInput)) {
+        if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout)) {
             mApiService.createMeeting(meeting);
             finish();
         }

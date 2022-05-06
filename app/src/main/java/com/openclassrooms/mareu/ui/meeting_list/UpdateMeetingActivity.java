@@ -39,6 +39,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private EditText mMeetingSubject;
     private EditText mMeetingDate;
 
+    private TextInputLayout mMeetingDescriptionLayout;
     private EditText mMeetingDescription;
     private MeetingApiService mApiService;
 
@@ -71,7 +72,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         setMeetingInfo(meeting);
         setMeetingRoomChecked(meeting);
         ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
-        ValidationService.checkIfSubjectIsValid(mMeetingSubjectLayout, mMeetingSubject, mUpdateButton);
+        ValidationService.textInputValidation(mMeetingSubject, mMeetingSubjectLayout, mUpdateButton);
+        ValidationService.textInputValidation(mMeetingDescription, mMeetingDescriptionLayout, mUpdateButton);
         checkIfEmailIsValid(mParticipantsLayout, mParticipantInput, mUpdateButton);
     }
 
@@ -94,6 +96,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mParticipantsLayout = findViewById(R.id.add_participants_layout);
         mParticipantInput = findViewById(R.id.add_participants_input);
         mMeetingParticipants = findViewById(R.id.participants_list_text);
+        mMeetingDescriptionLayout = findViewById(R.id.add_description_layout);
         mMeetingDescription = findViewById(R.id.add_description);
         mMeetingRoom1 = findViewById(R.id.radioButton_room1);
         mMeetingRoom2 = findViewById(R.id.radioButton_room2);
@@ -116,6 +119,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         mMeetingDescription.setText(meeting.getDescription());
         mUpdateButton.setText("MODIFIER");
+        participants.add(meeting.getParticipants().substring(0,meeting.getParticipants().length()-2));
 
 
     }
@@ -174,15 +178,11 @@ public class UpdateMeetingActivity extends AppCompatActivity {
      * Add the participant email when added in selected input
      */
     public void addParticipant(String participant) {
-        participants.add(mMeetingParticipants.getText().toString());
+
         participants.add(participant);
         StringBuilder mails = new StringBuilder();
         for (String participantMail: participants) {
-            if (participantMail.endsWith(" ")) {
-                mails.append(participantMail);
-            } else {
-                mails.append(participantMail).append("; ");
-            }
+            mails.append(participantMail).append("; ");
         }
         mMeetingParticipants.setText(mails.toString());
         mParticipantInput.getText().clear();

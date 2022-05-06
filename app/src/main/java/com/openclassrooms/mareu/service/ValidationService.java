@@ -3,10 +3,7 @@ package com.openclassrooms.mareu.service;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputLayout;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -14,9 +11,10 @@ import android.widget.TextView;
 
 public class ValidationService {
 
-    public static boolean validateSubject(String subject, TextInputLayout subjectError) {
-        String subjectRegex = "^[A-Za-z ]*$";
+    public static boolean validateTextInput(String subject, TextInputLayout subjectError) {
+        String subjectRegex = "^[a-zA-Zéèàêîïôö ]*$";
         if (subject.matches(subjectRegex) && (subject.trim().length() > 2))  {
+            subjectError.setError(null);
             return true;
         } else {
             subjectError.setError("Le sujet doit comporter au minimum 3 caractères");
@@ -27,6 +25,7 @@ public class ValidationService {
     public static boolean validateEmail(String email, TextInputLayout inputError) {
         String emailRegex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         if (email.matches(emailRegex) && (email.trim().length() > 5))  {
+            inputError.setError(null);
             return true;
         } else {
             inputError.setError("Cette adresse e-mail ne semble pas valide");
@@ -53,31 +52,22 @@ public class ValidationService {
     }
 
     /**
-     * Subject Text changed listener to validate field & set enabled the creation button
+     * Subject Text changed listener to validate field & set enabled/disabled the creation button
      */
-    public static void checkIfSubjectIsValid(TextInputLayout subjectInputLayout, EditText subjectEditText, MaterialButton actionButton) {
-        subjectInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+    public static void textInputValidation(EditText textInput, TextInputLayout textInputLayout, MaterialButton actionButton) {
+        textInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                actionButton.setEnabled(false);
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                subjectEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN)  {
-                            ValidationService.validateSubject(s.toString(), subjectInputLayout);
-                            if (ValidationService.validateSubject(s.toString(), subjectInputLayout)) {
-                                actionButton.setEnabled(true);
-                            }
-                        }
-                        return false;
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (ValidationService.validateTextInput(textInputLayout.getEditText().getText().toString(), textInputLayout)) {
+                        textInputLayout.setError(null);
+                        actionButton.setEnabled(true);
+                    } else {
+                        actionButton.setEnabled(false);
                     }
-                });
+                } else {
+                    textInputLayout.setErrorEnabled(false);
+                }
             }
         });
     }
