@@ -23,25 +23,22 @@ import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 
 public class UpdateMeetingActivity extends AppCompatActivity {
 
-    @BindView(R.id.add_subject_layout)
-    TextInputLayout subjectLayout;
+    private TextInputLayout mMeetingSubjectLayout;
 
-    @BindView(R.id.add_participants_layout)
-    TextInputLayout participantsLayout;
-    @BindView(R.id.add_participants_input)
-    EditText participantInput;
+    private TextInputLayout mParticipantsLayout;
+    private EditText mParticipantInput;
+    private TextView mMeetingParticipants;
 
     private ImageView mMeetingColor;
     private EditText mMeetingSubject;
     private EditText mMeetingDate;
-    private TextView mMeetingRoom;
-    private TextView mMeetingParticipants;
+
     private EditText mMeetingDescription;
     private MeetingApiService mApiService;
 
@@ -55,9 +52,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private RadioButton mMeetingRoom8;
     private RadioButton mMeetingRoom9;
     private RadioButton mMeetingRoom10;
-    private MaterialButton mUpdateButton;
+    MaterialButton mUpdateButton;
 
-    private List<String> participants;
+    private List<String> participants = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +71,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         setMeetingInfo(meeting);
         setMeetingRoomChecked(meeting);
         ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
+        ValidationService.checkIfSubjectIsValid(mMeetingSubjectLayout, mMeetingSubject, mUpdateButton);
+        checkIfEmailIsValid(mParticipantsLayout, mParticipantInput, mUpdateButton);
     }
 
     @Override
@@ -89,9 +88,11 @@ public class UpdateMeetingActivity extends AppCompatActivity {
 
     private void getViews() {
         mMeetingColor = findViewById(R.id.avatar);
+        mMeetingSubjectLayout = findViewById(R.id.add_subject_layout);
         mMeetingSubject = findViewById(R.id.add_subject_input);
-        mMeetingRoom = findViewById(R.id.add_room_name_layout);
         mMeetingDate = findViewById(R.id.add_date_input);
+        mParticipantsLayout = findViewById(R.id.add_participants_layout);
+        mParticipantInput = findViewById(R.id.add_participants_input);
         mMeetingParticipants = findViewById(R.id.participants_list_text);
         mMeetingDescription = findViewById(R.id.add_description);
         mMeetingRoom1 = findViewById(R.id.radioButton_room1);
@@ -143,6 +144,49 @@ public class UpdateMeetingActivity extends AppCompatActivity {
             case "Donkey Kong" : mMeetingRoom10.setChecked(true);
                 break;
         }
+    }
+
+    private void checkIfEmailIsValid(TextInputLayout mailInputLayout, EditText mailEditText, MaterialButton actionButton) {
+        mailInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                actionButton.setEnabled(false);
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mailEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
+                            addParticipant(s.toString());
+                            actionButton.setEnabled(true);
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Add the participant email when added in selected input
+     */
+    public void addParticipant(String participant) {
+        participants.add(mMeetingParticipants.getText().toString());
+        participants.add(participant);
+        StringBuilder mails = new StringBuilder();
+        for (String participantMail: participants) {
+            if (participantMail.endsWith(" ")) {
+                mails.append(participantMail);
+            } else {
+                mails.append(participantMail).append("; ");
+            }
+        }
+        mMeetingParticipants.setText(mails.toString());
+        mParticipantInput.getText().clear();
+        mParticipantsLayout.setError(null);
     }
 
 }
