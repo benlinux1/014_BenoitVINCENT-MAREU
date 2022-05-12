@@ -1,6 +1,7 @@
 package com.openclassrooms.mareu.service;
 
 import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.model.Participant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,4 +92,5 @@ public class DummyMeetingApiService implements MeetingApiService {
             meeting.setFree(true);
         }
     }
+
 }

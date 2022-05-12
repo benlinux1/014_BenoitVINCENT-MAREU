@@ -5,6 +5,7 @@ import android.support.design.widget.TextInputLayout;
 
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -33,14 +34,14 @@ public class ValidationService {
         }
     }
 
-    public static boolean validateAllFields(TextInputLayout subjectLayout, TextInputLayout dateInput, TextView participantsList, TextInputLayout participantsLayout, TextInputLayout descriptionInput) {
+    public static boolean validateAllFields(TextInputLayout subjectLayout, TextInputLayout dateInput, ListView participantsList, TextInputLayout participantsLayout, TextInputLayout descriptionInput) {
         if (subjectLayout.getEditText().getText().toString().equals("")) {
             subjectLayout.setError("Merci de compléter ce champ");
         }
         else if (dateInput.getEditText().getText().toString().equals("")) {
             dateInput.setError("Merci de compléter ce champ");
         }
-        else if (participantsList.getText().toString().equals("")) {
+        else if (participantsList.toString().equals("")) {
             participantsLayout.setError("Merci de compléter ce champ");
         }
         else if (descriptionInput.getEditText().getText().toString().equals("")) {

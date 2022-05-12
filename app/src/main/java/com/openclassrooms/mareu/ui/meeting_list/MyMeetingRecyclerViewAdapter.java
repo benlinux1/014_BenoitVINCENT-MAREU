@@ -49,16 +49,16 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         holder.mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         holder.mMeetingAvatar.setColorFilter(Color.parseColor(meeting.getAvatarColor()));
 
-        // Modify Delete button's action according to Neighbours Page / Favorites Page
+        // Delete meeting Button
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Delete meeting from global List & favorites too
+                // Delete meeting from global List
                 EventBus.getDefault().post(new DeleteMeetingEvent(meeting));
             }
         });
 
-         // Launch Profile Activity according to the Neighbour's Id
+         // Launch Meeting Details according to the Meeting Id
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View meetingItem) {

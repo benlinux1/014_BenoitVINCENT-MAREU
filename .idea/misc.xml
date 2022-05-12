@@ -61,6 +61,8 @@
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/layout/fragment_meeting_list.xml" value="0.25176589303733604" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/layout/fragment_neighbour.xml" value="0.17481884057971014" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/layout/fragment_neighbour_list.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/layout/fragment_participant.xml" value="0.21693840579710144" />
+        <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/layout/fragment_participant_list.xml" value="0.18840579710144928" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.389" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.389" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/ANDROID/PROJET 4 - MAREU/app/src/main/res/mipmap-anydpi-v26/ic_mario.xml" value="0.286" />
@@ -69,6 +71,7 @@
   </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../.." />
+    <option name="OPTION_SCOPE" value="public" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="androidx.annotation.Nullable" />

@@ -13,6 +13,7 @@
     <string name="meeting_room_name">Room name</string>
     <string name="add_member_title">E-mail des participants :</string>
     <string name="add_member">Ajoutez un participant (email)</string>
+    <string name="participant_name">Nom du participant</string>
     <string name="meeting_description_title">Ordre du jour</string>
     <string name="meeting_description_text">Décrivez en quelques mots l\'ordre du jour</string>
     <string name="meeting_detail_update_button">+</string>

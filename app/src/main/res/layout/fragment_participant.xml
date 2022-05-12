@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:gravity="center_vertical"
+    android:background="@null"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/participant_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
+
+    <ImageButton
+        android:id="@+id/delete_participant_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_white_24dp"
+        android:background="@null"
+        android:paddingLeft="8dp"/>
+
+</LinearLayout>

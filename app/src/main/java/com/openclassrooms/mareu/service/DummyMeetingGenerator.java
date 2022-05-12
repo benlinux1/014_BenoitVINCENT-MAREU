@@ -1,6 +1,7 @@
 package com.openclassrooms.mareu.service;
 
 import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.model.Participant;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,9 +11,9 @@ public abstract class DummyMeetingGenerator {
 
     public static List<Meeting> dummyMeetings = Arrays.asList(
             new Meeting(1, "Réunion A", "#bff40c", "28-04-2022, 14h30",
-                    "Peach",  "mario@test.com; luigi@test.com;", "Cette réunion portera sur..."),
+                    "Peach", "mario@test.com; luigi@test.com", "Cette réunion portera sur..."),
             new Meeting(2, "Réunion B", "#0cf4cd", "28-04-2022, 16h30",
-                    "Mario",  "peach@test.com; marotte@test.com;", "Cette réunion portera sur..."),
+                    "Mario",  "peach@test.com; marotte@test.com", "Cette réunion portera sur..."),
             new Meeting(3, "Réunion C", "#256e95", "29-04-2022, 8h30",
                     "Luigi",  "gaby@test.com; nana@test.com;", "Cette réunion portera sur..."),
             new Meeting(4, "Réunion D", "#259583", "29-04-2022, 8h30",

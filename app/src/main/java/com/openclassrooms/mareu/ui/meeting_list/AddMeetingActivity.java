@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -23,12 +24,12 @@ import android.widget.TextView;
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.model.Participant;
 import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 import com.openclassrooms.mareu.service.ColorService;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -52,7 +53,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     @BindView(R.id.participants_list_title)
     TextView participantsListTitle;
     @BindView(R.id.participants_list_text)
-    TextView participantsList;
+    ListView participantsList;
     @BindView(R.id.add_description_layout)
     TextInputLayout descriptionInputLayout;
     @BindView(R.id.add_description)
@@ -62,13 +63,15 @@ public class AddMeetingActivity extends AppCompatActivity {
     @BindView(R.id.create)
     MaterialButton addButton;
 
+    private TextView mParticipantMail;
+
     private MeetingApiService mApiService;
     private String mAvatarColor;
     private RadioGroup mFirstGroup;
     private RadioGroup mSecondGroup;
     private boolean isChecking = true;
     private int mCheckedId = R.id.radioButton_room1;
-    private List<String> participants = new ArrayList<>();
+    private ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,8 @@ public class AddMeetingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getMeetingApiService();
-        ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
+
+        ValidationService.checkIfRoomIsChecked(mFirstGroup=findViewById(R.id.radioGroup_1_to_5), mSecondGroup=findViewById(R.id.radioGroup_6_to_10));
         setMeetingColor();
         ValidationService.textInputValidation(subject, subjectLayout, addButton);
         checkIfEmailIsValid(participantsLayout, participantInput, addButton);
@@ -109,7 +113,8 @@ public class AddMeetingActivity extends AppCompatActivity {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
-                            addParticipant(s.toString());
+                            Participant participant = new Participant(s.toString());
+                            addParticipant(participant);
                             showParticipantsList();
                             actionButton.setEnabled(true);
                         }
@@ -123,15 +128,27 @@ public class AddMeetingActivity extends AppCompatActivity {
     /**
      * Add the participant email when added in selected input
      */
-    public void addParticipant(String participant) {
-        participants.add(participant);
-        StringBuilder mails = new StringBuilder();
-        for (String participantMail: participants) {
-            mails.append(participantMail).append("; ");
-        }
-        participantsList.setText(mails.toString());
+    public void addParticipant(Participant participant) {
+        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, arrayOfParticipants);
+        // Attach the adapter to a ListView
+        ListView participantView = (ListView) findViewById(R.id.participants_list_text);
+        participantView.setAdapter(participantsAdapter);
+        arrayOfParticipants.add(participant);
         participantInput.getText().clear();
         participantsLayout.setError(null);
+    }
+
+    /**
+     * Format array of participants to email List
+     * @return String
+     */
+    public String emailList() {
+        StringBuilder emailList = new StringBuilder();
+        for (Participant participant : arrayOfParticipants) {
+            String mail = participant.email;
+            emailList.append(mail+"; ");
+        }
+        return emailList.toString();
     }
 
     /**
@@ -169,6 +186,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Send form values to create a new meeting after fields validation
      */
@@ -180,7 +198,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 mAvatarColor,
                 Objects.requireNonNull(dateInput.getEditText()).getText().toString(),
                 getRoomValue(),
-                participantsList.getText().toString(),
+                emailList(),
                 Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString()
         );
         if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout)) {

@@ -9,8 +9,8 @@
     </style>
 
     <style name="cardView" >
-        <item name="android:background">#FFFFFF</item>
-        <item name="android:elevation">4dp</item>
+        <item name="background">@color/colorWhite</item>
+        <item name="elevation">4dp</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
         <item name="android:paddingTop">8dp</item>

@@ -12,14 +12,18 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.model.Participant;
 import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 
@@ -33,7 +37,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
 
     private TextInputLayout mParticipantsLayout;
     private EditText mParticipantInput;
-    private TextView mMeetingParticipants;
+    private ListView mMeetingParticipants;
+    private TextView mMeetingParticipantsListTitle;
 
     private ImageView mMeetingColor;
     private EditText mMeetingSubject;
@@ -54,8 +59,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private RadioButton mMeetingRoom9;
     private RadioButton mMeetingRoom10;
     MaterialButton mUpdateButton;
+    ImageButton mDeleteButton;
 
-    private List<String> participants = new ArrayList<>();
+    ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
 
         getViews();
         setMeetingInfo(meeting);
+        setParticipants(meeting);
+        showParticipantsList();
         setMeetingRoomChecked(meeting);
         ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
         ValidationService.textInputValidation(mMeetingSubject, mMeetingSubjectLayout, mUpdateButton);
@@ -95,7 +103,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingDate = findViewById(R.id.add_date_input);
         mParticipantsLayout = findViewById(R.id.add_participants_layout);
         mParticipantInput = findViewById(R.id.add_participants_input);
-        mMeetingParticipants = findViewById(R.id.participants_list_text);
         mMeetingDescriptionLayout = findViewById(R.id.add_description_layout);
         mMeetingDescription = findViewById(R.id.add_description);
         mMeetingRoom1 = findViewById(R.id.radioButton_room1);
@@ -109,19 +116,18 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingRoom9 = findViewById(R.id.radioButton_room9);
         mMeetingRoom10 = findViewById(R.id.radioButton_room10);
         mUpdateButton = findViewById(R.id.create);
+        mDeleteButton = findViewById(R.id.item_list_delete_button);
+        mMeetingParticipantsListTitle = findViewById(R.id.participants_list_title);
+        mMeetingParticipants = findViewById(R.id.participants_list_text);
     }
 
     private void setMeetingInfo(Meeting meeting) {
         mMeetingColor.setColorFilter(Color.parseColor(meeting.getAvatarColor()));
         mMeetingSubject.setText(meeting.getSubject());
         mMeetingDate.setText(meeting.getDate());
-        mMeetingParticipants.setVisibility(View.VISIBLE);
-        mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         mMeetingDescription.setText(meeting.getDescription());
         mUpdateButton.setText("MODIFIER");
-        participants.add(meeting.getParticipants().substring(0,meeting.getParticipants().length()-2));
-
-
+        setParticipants(meeting);
     }
 
     private void setMeetingRoomChecked(Meeting meeting) {
@@ -174,17 +180,28 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         });
     }
 
+    public void setParticipants(Meeting meeting) {
+        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, arrayOfParticipants);
+        // Attach the adapter to a ListView
+        ListView participantView = (ListView) findViewById(R.id.participants_list_text);
+        participantView.setAdapter(participantsAdapter);
+        String emailList = meeting.getParticipants();
+        String[] emails = emailList.split("; ");
+        for (String email : emails) {
+            Participant participantMail = new Participant(email);
+            arrayOfParticipants.add(participantMail);
+        }
+    }
+
+    public void showParticipantsList() {
+        mMeetingParticipantsListTitle.setVisibility(View.VISIBLE);
+        mMeetingParticipants.setVisibility(View.VISIBLE);
+    }
+
     /**
      * Add the participant email when added in selected input
      */
-    public void addParticipant(String participant) {
-
-        participants.add(participant);
-        StringBuilder mails = new StringBuilder();
-        for (String participantMail: participants) {
-            mails.append(participantMail).append("; ");
-        }
-        mMeetingParticipants.setText(mails.toString());
+    public void addParticipant(String participantEmail) {
         mParticipantInput.getText().clear();
         mParticipantsLayout.setError(null);
     }
