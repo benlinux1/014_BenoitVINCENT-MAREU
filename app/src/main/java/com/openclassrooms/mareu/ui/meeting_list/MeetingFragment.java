@@ -55,7 +55,7 @@ public class MeetingFragment extends Fragment {
     }
 
     /**
-     * Init the List of neighbours
+     * Init the List of meetings
      */
     private void initList() {
         mMeetings = mApiService.getMeetings();
@@ -81,7 +81,7 @@ public class MeetingFragment extends Fragment {
     }
 
     /**
-     * Fired if the user clicks on a delete button in Neighbours List
+     * Fired if the user clicks on a delete button in Meeting List
      * @param event
      */
     @Subscribe

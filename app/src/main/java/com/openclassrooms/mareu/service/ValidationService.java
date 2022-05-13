@@ -3,6 +3,7 @@ package com.openclassrooms.mareu.service;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputLayout;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -34,7 +35,7 @@ public class ValidationService {
         }
     }
 
-    public static boolean validateAllFields(TextInputLayout subjectLayout, TextInputLayout dateInput, ListView participantsList, TextInputLayout participantsLayout, TextInputLayout descriptionInput) {
+    public static boolean validateAllFields(TextInputLayout subjectLayout, TextInputLayout dateInput, RecyclerView participantsList, TextInputLayout participantsLayout, TextInputLayout descriptionInput) {
         if (subjectLayout.getEditText().getText().toString().equals("")) {
             subjectLayout.setError("Merci de compléter ce champ");
         }

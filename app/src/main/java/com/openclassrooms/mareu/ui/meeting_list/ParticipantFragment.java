@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.events.DeleteMeetingEvent;
+import com.openclassrooms.mareu.events.DeleteParticipantEvent;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.model.Participant;
 import com.openclassrooms.mareu.service.MeetingApiService;
@@ -27,6 +28,7 @@ import java.util.List;
 public class ParticipantFragment extends Fragment {
 
     private MeetingApiService mApiService;
+    private String participants;
     private ArrayList<Participant> mParticipants;
     private RecyclerView mParticipantsRecyclerView;
 
@@ -55,8 +57,6 @@ public class ParticipantFragment extends Fragment {
         return view;
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -75,11 +75,11 @@ public class ParticipantFragment extends Fragment {
     }
 
     /**
-     * Fired if the user clicks on a delete button in Neighbours List
+     * Fired if the user clicks on a delete button in Participants List
      * @param event
      */
     @Subscribe
-    public void onDeleteMeeting(DeleteMeetingEvent event) {
-        mApiService.deleteMeeting(event.meeting);
+    public void onDeleteParticipant(DeleteParticipantEvent event) {
+        mApiService.deleteParticipant(event.participant);
     }
 }

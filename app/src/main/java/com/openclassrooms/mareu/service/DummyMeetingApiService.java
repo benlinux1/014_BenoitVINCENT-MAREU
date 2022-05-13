@@ -31,6 +31,14 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public void deleteParticipant(Participant participant) {
+        meetings.remove(participant);
+    }
+
+    /**
+     * {@inheritDoc}
      * @param meeting
      */
     @Override

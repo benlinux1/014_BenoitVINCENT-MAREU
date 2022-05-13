@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -16,7 +18,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -53,7 +54,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     @BindView(R.id.participants_list_title)
     TextView participantsListTitle;
     @BindView(R.id.participants_list_text)
-    ListView participantsList;
+    RecyclerView participantsList;
     @BindView(R.id.add_description_layout)
     TextInputLayout descriptionInputLayout;
     @BindView(R.id.add_description)
@@ -62,8 +63,6 @@ public class AddMeetingActivity extends AppCompatActivity {
     RadioButton room1Button;
     @BindView(R.id.create)
     MaterialButton addButton;
-
-    private TextView mParticipantMail;
 
     private MeetingApiService mApiService;
     private String mAvatarColor;
@@ -99,6 +98,9 @@ public class AddMeetingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Listener on participant email input. Send participant email (if valid) in participants List when "Done" is pressed
+     */
     private void checkIfEmailIsValid(TextInputLayout mailInputLayout, EditText mailEditText, MaterialButton actionButton) {
         mailInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,29 +128,27 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     /**
-     * Add the participant email when added in selected input
+     * Add the participant email to participants array when added in selected input
+     * @param participant
      */
     public void addParticipant(Participant participant) {
-        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, arrayOfParticipants);
-        // Attach the adapter to a ListView
-        ListView participantView = (ListView) findViewById(R.id.participants_list_text);
-        participantView.setAdapter(participantsAdapter);
+        initParticipantsRecyclerView();
         arrayOfParticipants.add(participant);
         participantInput.getText().clear();
         participantsLayout.setError(null);
+        showParticipantsList();
     }
 
     /**
-     * Format array of participants to email List
-     * @return String
+     * Show hidden participants fields [Title & email] (used when participant is added)
      */
-    public String emailList() {
-        StringBuilder emailList = new StringBuilder();
-        for (Participant participant : arrayOfParticipants) {
-            String mail = participant.email;
-            emailList.append(mail+"; ");
-        }
-        return emailList.toString();
+    private void initParticipantsRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView participantsRecyclerView = findViewById(R.id.participants_list_text);
+        participantsRecyclerView.setLayoutManager(layoutManager);
+        ParticipantAdapter mAdapter = new ParticipantAdapter(arrayOfParticipants);
+        // Set custom Adapter as the adapter for RecyclerView.
+        participantsRecyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -157,6 +157,19 @@ public class AddMeetingActivity extends AppCompatActivity {
     public void showParticipantsList() {
         participantsListTitle.setVisibility(View.VISIBLE);
         participantsList.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Convert array of participants to email List
+     * @return String emailList
+     */
+    public String getEmailList() {
+        StringBuilder emailList = new StringBuilder();
+        for (Participant participant : arrayOfParticipants) {
+            String mail = participant.email;
+            emailList.append(mail+"; ");
+        }
+        return emailList.toString();
     }
 
     /**
@@ -186,20 +199,19 @@ public class AddMeetingActivity extends AppCompatActivity {
         }
     }
 
-
     /**
-     * Send form values to create a new meeting after fields validation
+     * Send form values to create a new meeting after fields validation & close add activity
      */
     @OnClick(R.id.create)
     void addMeeting() {
         Meeting meeting = new Meeting(
-                System.currentTimeMillis(),
-                Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(),
-                mAvatarColor,
-                Objects.requireNonNull(dateInput.getEditText()).getText().toString(),
-                getRoomValue(),
-                emailList(),
-                Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString()
+                System.currentTimeMillis(), //meeting id
+                Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(), //meeting subject
+                mAvatarColor, //meeting color
+                Objects.requireNonNull(dateInput.getEditText()).getText().toString(), //meeting date
+                getRoomValue(), //meeting room
+                getEmailList(), //meeting participants
+                Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description
         );
         if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout)) {
             mApiService.createMeeting(meeting);

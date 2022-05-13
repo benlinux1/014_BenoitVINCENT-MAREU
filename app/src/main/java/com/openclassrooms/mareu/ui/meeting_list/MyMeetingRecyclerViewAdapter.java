@@ -29,7 +29,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items, String actualPage) {
         mMeetings = items;
-        this.actualPage = actualPage; // necessary to switch actions between Neighbours / Favorites Page
+        this.actualPage = actualPage;
     }
 
     @NonNull
@@ -93,5 +93,4 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
             ButterKnife.bind(this, itemView);
         }
     }
-
 }

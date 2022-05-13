@@ -6,17 +6,17 @@ import android.os.Bundle;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -28,26 +28,12 @@ import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 
 import java.util.ArrayList;
-import java.util.List;
 
+public class UpdateMeetingActivity extends AppCompatActivity implements View.OnClickListener {
 
-public class UpdateMeetingActivity extends AppCompatActivity {
-
-    private TextInputLayout mMeetingSubjectLayout;
-
-    private TextInputLayout mParticipantsLayout;
-    private EditText mParticipantInput;
-    private ListView mMeetingParticipants;
-    private TextView mMeetingParticipantsListTitle;
-
-    private ImageView mMeetingColor;
-    private EditText mMeetingSubject;
     private EditText mMeetingDate;
-
-    private TextInputLayout mMeetingDescriptionLayout;
-    private EditText mMeetingDescription;
-    private MeetingApiService mApiService;
-
+    private TextInputLayout mMeetingSubjectLayout;
+    private EditText mMeetingSubject;
     private RadioButton mMeetingRoom1;
     private RadioButton mMeetingRoom2;
     private RadioButton mMeetingRoom3;
@@ -58,10 +44,18 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private RadioButton mMeetingRoom8;
     private RadioButton mMeetingRoom9;
     private RadioButton mMeetingRoom10;
-    MaterialButton mUpdateButton;
-    ImageButton mDeleteButton;
+    private TextInputLayout mParticipantsLayout;
+    private EditText mParticipantInput;
+    private TextView mMeetingParticipantsListTitle;
+    private RecyclerView mMeetingParticipants;
+    private TextInputLayout mMeetingDescriptionLayout;
+    private EditText mMeetingDescription;
+    private ImageView mMeetingColor;
+    private MeetingApiService mApiService;
+    private MaterialButton mUpdateButton;
+    private ImageButton mDeleteButton;
 
-    ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
+    private final ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +70,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
 
         getViews();
         setMeetingInfo(meeting);
+        initRecyclerView();
         setParticipants(meeting);
         showParticipantsList();
         setMeetingRoomChecked(meeting);
@@ -180,11 +175,18 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         });
     }
 
+    private void initRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.participants_list_text);
+        recyclerView.setLayoutManager(layoutManager);
+
+        ParticipantAdapter mAdapter = new ParticipantAdapter(arrayOfParticipants);
+
+        // Set CustomAdapter as the adapter for RecyclerView.
+        recyclerView.setAdapter(mAdapter);
+    }
+
     public void setParticipants(Meeting meeting) {
-        ParticipantsAdapter participantsAdapter = new ParticipantsAdapter(this, arrayOfParticipants);
-        // Attach the adapter to a ListView
-        ListView participantView = (ListView) findViewById(R.id.participants_list_text);
-        participantView.setAdapter(participantsAdapter);
         String emailList = meeting.getParticipants();
         String[] emails = emailList.split("; ");
         for (String email : emails) {
@@ -204,6 +206,11 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     public void addParticipant(String participantEmail) {
         mParticipantInput.getText().clear();
         mParticipantsLayout.setError(null);
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
 }
