@@ -106,6 +106,9 @@ public class AddMeetingActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 actionButton.setEnabled(false);
+                if (arrayOfParticipants.isEmpty()) {
+                    participantsListTitle.setVisibility(View.GONE);
+                }
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -146,7 +149,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView participantsRecyclerView = findViewById(R.id.participants_list_text);
         participantsRecyclerView.setLayoutManager(layoutManager);
-        ParticipantAdapter mAdapter = new ParticipantAdapter(arrayOfParticipants);
+        ParticipantRecyclerViewAdapter mAdapter = new ParticipantRecyclerViewAdapter(arrayOfParticipants);
         // Set custom Adapter as the adapter for RecyclerView.
         participantsRecyclerView.setAdapter(mAdapter);
     }
@@ -200,6 +203,19 @@ public class AddMeetingActivity extends AppCompatActivity {
     }
 
     /**
+     * Check if Participants List is not Empty
+     * Used when Create Button is pressed
+     */
+    private boolean checkParticipantList() {
+        if (arrayOfParticipants.isEmpty()) {
+            participantsLayout.setError("Merci de saisir l'adresse email d'un participant");
+            participantsListTitle.setVisibility(View.GONE);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Send form values to create a new meeting after fields validation & close add activity
      */
     @OnClick(R.id.create)
@@ -213,7 +229,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 getEmailList(), //meeting participants
                 Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description
         );
-        if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout)) {
+        if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout) && checkParticipantList()) {
             mApiService.createMeeting(meeting);
             finish();
         }

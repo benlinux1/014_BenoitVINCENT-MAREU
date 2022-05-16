@@ -5,24 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.openclassrooms.mareu.R;
-import com.openclassrooms.mareu.events.DeleteMeetingEvent;
-import com.openclassrooms.mareu.events.DeleteParticipantEvent;
 import com.openclassrooms.mareu.model.Participant;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
 
-public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.ViewHolder> {
+public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Participant> participants;
 
-    public ParticipantAdapter(ArrayList<Participant> participants) {
+    public ParticipantRecyclerViewAdapter(ArrayList<Participant> participants) {
         this.participants = participants;
     }
 
@@ -33,7 +28,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_participant, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view).linkAdapter(this);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -43,7 +38,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
         viewHolder.displayParticipant(participant);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of the array of participants (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return participants.size();
@@ -54,17 +49,27 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
      * (custom ViewHolder).
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView email;
-        public final ImageButton deleteParticipantButton;
+        public final TextView participantEmail;
 
-        public ViewHolder(View view) {
-            super(view);
-            email = view.findViewById(R.id.participant_email);
-            deleteParticipantButton = view.findViewById(R.id.delete_participant_button);
+        private ParticipantRecyclerViewAdapter adapter;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            participantEmail = itemView.findViewById(R.id.participant_email);
+            itemView.findViewById(R.id.delete_participant_button).setOnClickListener(view -> {
+                adapter.participants.remove(getAdapterPosition());
+                adapter.notifyItemRemoved(getAdapterPosition());
+            });
         }
 
+        // Display participant email in viewHolder
         public void displayParticipant(Participant participant) {
-            email.setText(participant.email);
+            participantEmail.setText(participant.email);
+        }
+
+        public ViewHolder linkAdapter(ParticipantRecyclerViewAdapter adapter) {
+            this.adapter = adapter;
+            return this;
         }
     }
 }

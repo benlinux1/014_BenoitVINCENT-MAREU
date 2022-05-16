@@ -71,7 +71,6 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
         getViews();
         setMeetingInfo(meeting);
         initRecyclerView();
-        setParticipants(meeting);
         showParticipantsList();
         setMeetingRoomChecked(meeting);
         ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
@@ -180,9 +179,9 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.participants_list_text);
         recyclerView.setLayoutManager(layoutManager);
 
-        ParticipantAdapter mAdapter = new ParticipantAdapter(arrayOfParticipants);
+        ParticipantRecyclerViewAdapter mAdapter = new ParticipantRecyclerViewAdapter(arrayOfParticipants);
 
-        // Set CustomAdapter as the adapter for RecyclerView.
+        // Set CustomAdapter as the adapter for RecyclerView
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -193,6 +192,7 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
             Participant participantMail = new Participant(email);
             arrayOfParticipants.add(participantMail);
         }
+
     }
 
     public void showParticipantsList() {
