@@ -25,12 +25,6 @@ public interface MeetingApiService {
     void deleteMeeting(Meeting meeting);
 
     /**
-     * Deletes a participant
-     * @param participant
-     */
-    void deleteParticipant(Participant participant);
-
-    /**
      * Create a meeting
      * @param meeting
      */
@@ -59,5 +53,11 @@ public interface MeetingApiService {
      * @param meeting
      */
     void toggleFree(Meeting meeting);
+
+    /**
+     * Create a meeting
+     * @param meeting
+     */
+    void updateMeeting(Meeting meeting, int index);
 
 }

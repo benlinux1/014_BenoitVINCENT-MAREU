@@ -206,7 +206,7 @@ public class AddMeetingActivity extends AppCompatActivity {
      * Check if Participants List is not Empty
      * Used when Create Button is pressed
      */
-    private boolean checkParticipantList() {
+    private boolean checkIfParticipantListIsNotEmpty() {
         if (arrayOfParticipants.isEmpty()) {
             participantsLayout.setError("Merci de saisir l'adresse email d'un participant");
             participantsListTitle.setVisibility(View.GONE);
@@ -229,7 +229,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 getEmailList(), //meeting participants
                 Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description
         );
-        if (ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout) && checkParticipantList()) {
+        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout)) {
             mApiService.createMeeting(meeting);
             finish();
         }

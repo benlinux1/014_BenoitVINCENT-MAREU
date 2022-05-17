@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.openclassrooms.mareu.R;
@@ -28,12 +29,19 @@ import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class UpdateMeetingActivity extends AppCompatActivity implements View.OnClickListener {
+import butterknife.OnClick;
 
+public class UpdateMeetingActivity extends AppCompatActivity {
+
+    private TextInputLayout mMeetingDateLayout;
     private EditText mMeetingDate;
     private TextInputLayout mMeetingSubjectLayout;
     private EditText mMeetingSubject;
+    private RadioGroup mFirstGroup;
+    private RadioGroup mSecondGroup;
     private RadioButton mMeetingRoom1;
     private RadioButton mMeetingRoom2;
     private RadioButton mMeetingRoom3;
@@ -54,6 +62,7 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
     private MeetingApiService mApiService;
     private MaterialButton mUpdateButton;
     private ImageButton mDeleteButton;
+    private TextView mMeetingFirstSubject;
 
     private final ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
 
@@ -67,6 +76,7 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
         Intent getProfileIntent = getIntent();
         long id = getProfileIntent.getLongExtra("MEETING_ID",-1);
         Meeting meeting = mApiService.getMeetingData(id);
+
 
         getViews();
         setMeetingInfo(meeting);
@@ -94,11 +104,14 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
         mMeetingColor = findViewById(R.id.avatar);
         mMeetingSubjectLayout = findViewById(R.id.add_subject_layout);
         mMeetingSubject = findViewById(R.id.add_subject_input);
+        mMeetingDateLayout = findViewById(R.id.add_date_layout);
         mMeetingDate = findViewById(R.id.add_date_input);
         mParticipantsLayout = findViewById(R.id.add_participants_layout);
         mParticipantInput = findViewById(R.id.add_participants_input);
         mMeetingDescriptionLayout = findViewById(R.id.add_description_layout);
         mMeetingDescription = findViewById(R.id.add_description);
+        mFirstGroup = findViewById(R.id.radioGroup_1_to_5);
+        mSecondGroup = findViewById(R.id.radioGroup_6_to_10);
         mMeetingRoom1 = findViewById(R.id.radioButton_room1);
         mMeetingRoom2 = findViewById(R.id.radioButton_room2);
         mMeetingRoom3 = findViewById(R.id.radioButton_room3);
@@ -113,6 +126,7 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
         mDeleteButton = findViewById(R.id.item_list_delete_button);
         mMeetingParticipantsListTitle = findViewById(R.id.participants_list_title);
         mMeetingParticipants = findViewById(R.id.participants_list_text);
+        mMeetingFirstSubject = findViewById(R.id.meeting_id);
     }
 
     private void setMeetingInfo(Meeting meeting) {
@@ -122,6 +136,7 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
         mMeetingDescription.setText(meeting.getDescription());
         mUpdateButton.setText("MODIFIER");
         setParticipants(meeting);
+        mMeetingFirstSubject.setText(meeting.getSubject());
     }
 
     private void setMeetingRoomChecked(Meeting meeting) {
@@ -164,7 +179,8 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                         if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
-                            addParticipant(s.toString());
+                            Participant participant = new Participant(s.toString());
+                            addParticipant(participant);
                             actionButton.setEnabled(true);
                         }
                         return false;
@@ -203,14 +219,66 @@ public class UpdateMeetingActivity extends AppCompatActivity implements View.OnC
     /**
      * Add the participant email when added in selected input
      */
-    public void addParticipant(String participantEmail) {
+    public void addParticipant(Participant participant) {
+        initRecyclerView();
+        arrayOfParticipants.add(participant);
         mParticipantInput.getText().clear();
         mParticipantsLayout.setError(null);
     }
 
-    @Override
-    public void onClick(View view) {
-
+    /**
+     * Check if Participants List is not Empty
+     * Used when Create Button is pressed
+     */
+    private boolean checkIfParticipantListIsNotEmpty() {
+        if (arrayOfParticipants.isEmpty()) {
+            mParticipantsLayout.setError("Merci de saisir l'adresse email d'un participant");
+            mMeetingParticipantsListTitle.setVisibility(View.GONE);
+            return false;
+        }
+        return true;
     }
 
+    /**
+     * Used to get the room name checked in the list
+     */
+    private String getRoomValue() {
+        int selectedRadioButtonIDinGroup1 = mFirstGroup.getCheckedRadioButtonId();
+        int selectedRadioButtonIDinGroup2 = mSecondGroup.getCheckedRadioButtonId();
+
+        // If nothing is selected from Radio Group, then it return -1
+        if (selectedRadioButtonIDinGroup1 != -1) {
+            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup1);
+            String selectedRadioButtonText1 = selectedRadioButton.getText().toString();
+            return selectedRadioButtonText1;
+        } else { // it means that button is checked in Group 2
+            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup2);
+            String selectedRadioButtonText2 = selectedRadioButton.getText().toString();
+            return selectedRadioButtonText2;
+        }
+    }
+
+    /**
+     * Convert array of participants to email List
+     * @return String emailList
+     */
+    public String getEmailList() {
+        StringBuilder emailList = new StringBuilder();
+        for (Participant participant : arrayOfParticipants) {
+            String mail = participant.email;
+            emailList.append(mail+"; ");
+        }
+        return emailList.toString();
+    }
+
+
+    /**
+     * Send form values to create a new meeting after fields validation & close add activity
+     * @return
+     */
+    @OnClick(R.id.create)
+    void updateMeeting() {
+        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingDateLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
+        }
+    }
 }

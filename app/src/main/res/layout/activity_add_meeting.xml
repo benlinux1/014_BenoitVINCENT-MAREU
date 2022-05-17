@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profile_page"
+    android:id="@+id/meeting_detail_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EBEFF0"
@@ -22,6 +22,13 @@
             android:layout_marginEnd="18dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/meeting_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="@string/meeting_id"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/add_date_layout"
