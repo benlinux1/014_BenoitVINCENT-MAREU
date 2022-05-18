@@ -290,6 +290,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                 meeting.setDescription(mMeetingDescriptionLayout.getEditText().getText().toString());
                 break;
             }
+            finish();
         }
         if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingDateLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
             finish();
