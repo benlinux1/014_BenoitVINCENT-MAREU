@@ -18,4 +18,9 @@
     <string name="meeting_description_text">Décrivez en quelques mots l\'ordre du jour</string>
     <string name="meeting_detail_update_button">+</string>
     <string name="meeting_id">Meeting ID</string>
+
+    <string name="menu_filter_date">Filtrer par date</string>
+    <string name="menu_filter_room">Filtrer par salle</string>
+    <string name="menu_filter_reset">Voir toutes les réunions</string>
+
 </resources>

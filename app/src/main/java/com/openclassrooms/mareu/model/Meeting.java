@@ -1,5 +1,6 @@
 package com.openclassrooms.mareu.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,7 +18,7 @@ public class Meeting {
     private String avatarColor;
 
     /** Meeting Date */
-    private String mDate;
+    private Date mDate;
 
     /** Room Name */
     private String roomName;
@@ -43,7 +44,7 @@ public class Meeting {
      */
 
     public Meeting(long id, String subject, String avatarColor,
-                   String mDate, String roomName, String participants, String description) {
+                   Date mDate, String roomName, String participants, String description) {
         this.id = id;
         this.subject = subject;
         this.avatarColor = avatarColor;
@@ -78,11 +79,11 @@ public class Meeting {
         this.subject = subject;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return mDate;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.mDate = date;
     }
 

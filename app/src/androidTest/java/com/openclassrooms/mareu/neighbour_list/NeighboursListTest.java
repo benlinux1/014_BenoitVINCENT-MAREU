@@ -1,5 +1,5 @@
 
-package com.openclassrooms.mareu.meeting_list;
+package com.openclassrooms.mareu.neighbour_list;
 
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -97,11 +97,10 @@ public class NeighboursListTest {
         // Click on the fifth item in the neighbour list
         onView(withId(R.id.list_meetings))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(4, click()));
-        // Check if neighbour's data is displayed on his profile's page
+        // Check if meeting data is displayed on his profile's page
         Meeting meetingPosition = DI.getMeetingApiService().getMeetings().get(4);
         onView(withId(R.id.meeting_detail_location_room)).check(matches(withText(meetingPosition.getRoomName())));
         onView(withId(R.id.meeting_detail_second_title)).check(matches(withText(meetingPosition.getSubject())));
-        onView(withId(R.id.meeting_detail_date)).check(matches(withText(meetingPosition.getDate())));
     }
 
 

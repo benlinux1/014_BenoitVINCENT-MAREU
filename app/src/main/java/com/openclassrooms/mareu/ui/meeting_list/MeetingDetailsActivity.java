@@ -20,6 +20,7 @@ import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
 
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 public class MeetingDetailsActivity extends AppCompatActivity {
@@ -90,9 +91,10 @@ public class MeetingDetailsActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void setMeetingInfo(Meeting meeting) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à hh-mm");
         mMeetingSubtitle.setText(meeting.getSubject());
-        mMeetingDate.setText(meeting.getDate());
-        mMeetingRoom.setText("Salle " + "\" " + meeting.getRoomName() + " \"");
+        mMeetingDate.setText("Le " + dateFormat.format(meeting.getDate()));
+        mMeetingRoom.setText("Salle " + "\"" + meeting.getRoomName() + "\"");
         mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         mMeetingDescription.setText(meeting.getDescription());
     }

@@ -1,9 +1,9 @@
 package com.openclassrooms.mareu.service;
 
 import com.openclassrooms.mareu.model.Meeting;
-import com.openclassrooms.mareu.model.Participant;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,9 +56,10 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     /**
      * Get the free meeting rooms list by date
+     * @param time
      */
     @Override
-    public List<Meeting> getFreeMeetingsListByDate() {
+    public List<Meeting> getFreeMeetingsListByDate(Date time) {
         List<Meeting> freeMeetingRooms = new ArrayList<>();
         for (Meeting meeting : getMeetings())
             if (meeting.isFree()) {

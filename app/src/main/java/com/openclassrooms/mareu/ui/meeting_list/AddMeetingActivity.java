@@ -31,6 +31,7 @@ import com.openclassrooms.mareu.service.ValidationService;
 import com.openclassrooms.mareu.service.ColorService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -224,7 +225,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 System.currentTimeMillis(), //meeting id
                 Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(), //meeting subject
                 mAvatarColor, //meeting color
-                Objects.requireNonNull(dateInput.getEditText()).getText().toString(), //meeting date
+                (Date) Objects.requireNonNull(dateInput.getEditText()).getText(), //meeting date
                 getRoomValue(), //meeting room
                 getEmailList(), //meeting participants
                 Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description

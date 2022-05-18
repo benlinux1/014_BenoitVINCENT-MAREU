@@ -37,6 +37,7 @@ import com.openclassrooms.mareu.service.ValidationService;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -146,7 +147,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private void setMeetingInfo(Meeting meeting) {
         mMeetingColor.setColorFilter(Color.parseColor(meeting.getAvatarColor()));
         mMeetingSubject.setText(meeting.getSubject());
-        mMeetingDate.setText(meeting.getDate());
+        mMeetingDate.setText(meeting.getDate().toString());
         mMeetingDescription.setText(meeting.getDescription());
         mUpdateButton.setText("MODIFIER");
         setParticipants(meeting);
@@ -302,7 +303,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingId = getMeetingInfo().getId();
         for (Meeting meeting : mApiService.getMeetings()) {
             if (meeting.getId() == mMeetingId) {
-                meeting.setDate(mMeetingDateLayout.getEditText().getText().toString());
+                meeting.setDate((Date) mMeetingDateLayout.getEditText().getText());
                 meeting.setSubject(mMeetingSubjectLayout.getEditText().getText().toString());
                 meeting.setRoomName(getRoomValue());
                 meeting.setParticipants(getEmailList());
@@ -314,9 +315,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
             Toast.makeText(UpdateMeetingActivity.this, "Vos modifications ont bien été enregistrées", Toast.LENGTH_LONG).show();
             Meeting meeting = getMeetingInfo();
             finish();
-            Intent meetingDetailActivityIntent = new Intent(UpdateMeetingActivity.this, MeetingDetailsActivity.class);
-            meetingDetailActivityIntent.putExtra("MEETING_ID", meeting.getId());
-            UpdateMeetingActivity.this.startActivity(meetingDetailActivityIntent);
+            Intent meetingDetailsActivityIntent = new Intent(UpdateMeetingActivity.this, MeetingDetailsActivity.class);
+            meetingDetailsActivityIntent.putExtra("MEETING_ID", meeting.getId());
+            UpdateMeetingActivity.this.startActivity(meetingDetailsActivityIntent);
         }
 
     }

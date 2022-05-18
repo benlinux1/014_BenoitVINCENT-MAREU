@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/filter_date"
+        android:title="@string/menu_filter_date"
+        app:showAsAction="never" />
+    <item android:id="@+id/filter_room"
+        android:title="@string/menu_filter_room"
+        app:showAsAction="never" />
+    <item android:id="@+id/filter_reset"
+        android:title="@string/menu_filter_reset"
+        app:showAsAction="never"/>
+</menu>

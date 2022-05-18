@@ -19,6 +19,7 @@ import com.openclassrooms.mareu.events.DeleteMeetingEvent;
 import com.openclassrooms.mareu.model.Meeting;
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,9 +45,10 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à hh-mm");
         Meeting meeting = mMeetings.get(position);
         holder.mMeetingSubject.setText(meeting.getSubject() + " -");
-        holder.mMeetingDate.setText(meeting.getDate() + " -");
+        holder.mMeetingDate.setText(dateFormat.format(meeting.getDate()) + " -");
         holder.mMeetingRoom.setText(meeting.getRoomName());
         holder.mMeetingParticipants.setText((CharSequence) meeting.getParticipants());
         holder.mMeetingAvatar.setColorFilter(Color.parseColor(meeting.getAvatarColor()));

@@ -59,7 +59,7 @@ public class NeighbourServiceTest {
         // Call method to set meeting occupied
         service.toggleFree(roomToSetOccupied);
         // Check if meeting is NOT in the free lists and stay in global list
-        assertFalse(service.getFreeMeetingsListByDate().contains(roomToSetOccupied));
+        assertFalse(service.getFreeMeetingsListByDate(cal.getTime()).contains(roomToSetOccupied));
         assertFalse(service.getFreeMeetingsListByName().contains(roomToSetOccupied));
         assertTrue(service.getMeetings().contains(roomToSetOccupied));
     }
@@ -73,7 +73,7 @@ public class NeighbourServiceTest {
         // Call reverse method to set meeting room free
         service.toggleFree(meetingToDeleteFromOccupiedMeetings);
         // Check if meeting is in the free lists and is still in global list
-        assertTrue(service.getFreeMeetingsListByDate().contains(meetingToDeleteFromOccupiedMeetings));
+        assertTrue(service.getFreeMeetingsListByDate(cal.getTime()).contains(meetingToDeleteFromOccupiedMeetings));
         assertTrue(service.getFreeMeetingsListByName().contains(meetingToDeleteFromOccupiedMeetings));
         assertTrue(service.getMeetings().contains(meetingToDeleteFromOccupiedMeetings));
     }
@@ -88,7 +88,7 @@ public class NeighbourServiceTest {
         service.toggleFree(meetingToDeleteFromApi);
         // Check if meeting is removed from the free list AND from global list
         assertFalse(service.getFreeMeetingsListByName().contains(meetingToDeleteFromApi));
-        assertFalse(service.getFreeMeetingsListByDate().contains(meetingToDeleteFromApi));
+        assertFalse(service.getFreeMeetingsListByDate(cal.getTime()).contains(meetingToDeleteFromApi));
         assertFalse(service.getMeetings().contains(meetingToDeleteFromApi));
     }
 }

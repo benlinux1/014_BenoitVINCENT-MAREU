@@ -1,9 +1,8 @@
 package com.openclassrooms.mareu.service;
 
 import com.openclassrooms.mareu.model.Meeting;
-import com.openclassrooms.mareu.model.Participant;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -39,8 +38,9 @@ public interface MeetingApiService {
     /**
      * Get all Free Meetings Rooms by Date
      * @return {@link List}
+     * @param time
      */
-    List<Meeting> getFreeMeetingsListByDate();
+    List<Meeting> getFreeMeetingsListByDate(Date time);
 
     /**
      * Get all Free Meetings Dates by RoomName
