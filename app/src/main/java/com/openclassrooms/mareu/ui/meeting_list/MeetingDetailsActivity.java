@@ -89,9 +89,8 @@ public class MeetingDetailsActivity extends AppCompatActivity {
             .into(mMeetingColor);
     }
 
-    @SuppressLint("SetTextI18n")
     public void setMeetingInfo(Meeting meeting) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à hh-mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
         mMeetingSubtitle.setText(meeting.getSubject());
         mMeetingDate.setText("Le " + dateFormat.format(meeting.getDate()));
         mMeetingRoom.setText("Salle " + "\"" + meeting.getRoomName() + "\"");

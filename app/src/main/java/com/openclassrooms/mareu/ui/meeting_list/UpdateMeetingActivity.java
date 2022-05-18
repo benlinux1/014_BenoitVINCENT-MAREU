@@ -31,11 +31,13 @@ import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.events.DeleteMeetingEvent;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.model.Participant;
+import com.openclassrooms.mareu.service.DateTimeService;
 import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +72,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private ImageView mMeetingColor;
     private MeetingApiService mApiService;
     private MaterialButton mUpdateButton;
-    private TextView mMeetingFirstSubject;
     private long mMeetingId;
 
     private final ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
@@ -90,6 +91,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         ValidationService.textInputValidation(mMeetingSubject, mMeetingSubjectLayout, mUpdateButton);
         ValidationService.textInputValidation(mMeetingDescription, mMeetingDescriptionLayout, mUpdateButton);
         checkIfEmailIsValid(mParticipantsLayout, mParticipantInput, mUpdateButton);
+        listenToDate();
         setUpdateButtonListener();
     }
 
@@ -140,18 +142,30 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingRoom10 = findViewById(R.id.radioButton_room10);
         mMeetingParticipantsListTitle = findViewById(R.id.participants_list_title);
         mMeetingParticipants = findViewById(R.id.participants_list_text);
-        mMeetingFirstSubject = findViewById(R.id.meeting_id);
         mUpdateButton = findViewById(R.id.create);
     }
 
     private void setMeetingInfo(Meeting meeting) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
         mMeetingColor.setColorFilter(Color.parseColor(meeting.getAvatarColor()));
         mMeetingSubject.setText(meeting.getSubject());
-        mMeetingDate.setText(meeting.getDate().toString());
+        mMeetingDate.setText(dateFormat.format(meeting.getDate()));
         mMeetingDescription.setText(meeting.getDescription());
         mUpdateButton.setText("MODIFIER");
         setParticipants(meeting);
-        mMeetingFirstSubject.setText(meeting.getSubject());
+    }
+
+    private void listenToDate() {
+        mMeetingDate.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                DateTimeService.getDate(mMeetingDate, UpdateMeetingActivity.this);
+            }
+        });
+    }
+
+    private Date getMeetingDate(){
+        Date meetingDate = DateTimeService.getDate(mMeetingDate, UpdateMeetingActivity.this);
+        return meetingDate;
     }
 
     private void setMeetingRoomChecked(Meeting meeting) {
@@ -303,7 +317,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingId = getMeetingInfo().getId();
         for (Meeting meeting : mApiService.getMeetings()) {
             if (meeting.getId() == mMeetingId) {
-                meeting.setDate((Date) mMeetingDateLayout.getEditText().getText());
+                meeting.setDate(getMeetingDate());
                 meeting.setSubject(mMeetingSubjectLayout.getEditText().getText().toString());
                 meeting.setRoomName(getRoomValue());
                 meeting.setParticipants(getEmailList());
@@ -311,10 +325,10 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                 break;
             }
         }
-        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingDateLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
-            Toast.makeText(UpdateMeetingActivity.this, "Vos modifications ont bien été enregistrées", Toast.LENGTH_LONG).show();
+        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
             Meeting meeting = getMeetingInfo();
             finish();
+            Toast.makeText(UpdateMeetingActivity.this, "Vos modifications ont bien été enregistrées", Toast.LENGTH_LONG).show();
             Intent meetingDetailsActivityIntent = new Intent(UpdateMeetingActivity.this, MeetingDetailsActivity.class);
             meetingDetailsActivityIntent.putExtra("MEETING_ID", meeting.getId());
             UpdateMeetingActivity.this.startActivity(meetingDetailsActivityIntent);

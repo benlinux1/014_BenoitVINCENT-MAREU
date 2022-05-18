@@ -1,5 +1,6 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.button.MaterialButton;
@@ -16,21 +17,26 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.model.Participant;
+import com.openclassrooms.mareu.service.DateTimeService;
 import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 import com.openclassrooms.mareu.service.ColorService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -44,6 +50,8 @@ public class AddMeetingActivity extends AppCompatActivity {
     ImageView avatar;
     @BindView(R.id.add_date_layout)
     TextInputLayout dateInput;
+    @BindView(R.id.add_date_input)
+    EditText date;
     @BindView(R.id.add_subject_layout)
     TextInputLayout subjectLayout;
     @BindView(R.id.add_subject_input)
@@ -86,6 +94,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         ValidationService.textInputValidation(subject, subjectLayout, addButton);
         checkIfEmailIsValid(participantsLayout, participantInput, addButton);
         ValidationService.textInputValidation(descriptionInput, descriptionInputLayout, addButton);
+        listenToDate();
     }
 
     @Override
@@ -98,6 +107,20 @@ public class AddMeetingActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void listenToDate() {
+        date.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                DateTimeService.getDate(date, AddMeetingActivity.this);
+            }
+        });
+    }
+
+    private Date getMeetingDate(){
+        Date meetingDate = DateTimeService.getDate(date, AddMeetingActivity.this);
+        return meetingDate;
+    }
+
 
     /**
      * Listener on participant email input. Send participant email (if valid) in participants List when "Done" is pressed
@@ -225,13 +248,14 @@ public class AddMeetingActivity extends AppCompatActivity {
                 System.currentTimeMillis(), //meeting id
                 Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(), //meeting subject
                 mAvatarColor, //meeting color
-                (Date) Objects.requireNonNull(dateInput.getEditText()).getText(), //meeting date
+                getMeetingDate(), //meeting date
                 getRoomValue(), //meeting room
                 getEmailList(), //meeting participants
                 Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description
         );
-        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(subjectLayout, dateInput, participantsList, participantsLayout, descriptionInputLayout)) {
+        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(subjectLayout, participantsList, participantsLayout, descriptionInputLayout)) {
             mApiService.createMeeting(meeting);
+            Toast.makeText(AddMeetingActivity.this, "Réunion créée avec succès", Toast.LENGTH_LONG).show();
             finish();
         }
     }

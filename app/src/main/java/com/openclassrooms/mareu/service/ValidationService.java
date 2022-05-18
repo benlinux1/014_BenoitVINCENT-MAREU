@@ -35,12 +35,9 @@ public class ValidationService {
         }
     }
 
-    public static boolean validateAllFields(TextInputLayout subjectLayout, TextInputLayout dateInput, RecyclerView participantsList, TextInputLayout participantsLayout, TextInputLayout descriptionInput) {
+    public static boolean validateAllFields(TextInputLayout subjectLayout, RecyclerView participantsList, TextInputLayout participantsLayout, TextInputLayout descriptionInput) {
         if (subjectLayout.getEditText().getText().toString().equals("")) {
             subjectLayout.setError("Merci de compléter ce champ");
-        }
-        else if (dateInput.getEditText().getText().toString().equals("")) {
-            dateInput.setError("Merci de compléter ce champ");
         }
         else if (participantsList.toString().equals("")) {
             participantsLayout.setError("Merci de compléter ce champ");
