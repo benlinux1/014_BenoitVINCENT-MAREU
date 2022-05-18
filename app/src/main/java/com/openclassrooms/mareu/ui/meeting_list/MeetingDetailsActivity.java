@@ -114,6 +114,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
 
         builder.setPositiveButton("OUI", (dialog, which) -> {
             Meeting meeting = setMeetingData();
+            finish();
             Intent updateMeetingActivityIntent = new Intent(MeetingDetailsActivity.this, UpdateMeetingActivity.class);
             updateMeetingActivityIntent.putExtra("MEETING_ID", meeting.getId());
             MeetingDetailsActivity.this.startActivity(updateMeetingActivityIntent);

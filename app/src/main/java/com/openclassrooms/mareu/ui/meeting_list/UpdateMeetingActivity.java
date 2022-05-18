@@ -1,10 +1,14 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.button.MaterialButton;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,13 +24,17 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
+import com.openclassrooms.mareu.events.DeleteMeetingEvent;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.model.Participant;
 import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +79,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_meeting);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Meeting meeting = getMeetingInfo();
         getViews();
         setMeetingInfo(meeting);
@@ -82,13 +89,18 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         ValidationService.textInputValidation(mMeetingSubject, mMeetingSubjectLayout, mUpdateButton);
         ValidationService.textInputValidation(mMeetingDescription, mMeetingDescriptionLayout, mUpdateButton);
         checkIfEmailIsValid(mParticipantsLayout, mParticipantInput, mUpdateButton);
+        setUpdateButtonListener();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home : {
+                Meeting meeting = getMeetingInfo();
                 finish();
+                Intent meetingDetailActivityIntent = new Intent(UpdateMeetingActivity.this, MeetingDetailsActivity.class);
+                meetingDetailActivityIntent.putExtra("MEETING_ID", meeting.getId());
+                UpdateMeetingActivity.this.startActivity(meetingDetailActivityIntent);
                 return true;
             }
         }
@@ -102,7 +114,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         Meeting meeting = mApiService.getMeetingData(mMeetingId);
         return meeting;
     }
-
 
     private void getViews() {
         mMeetingColor = findViewById(R.id.avatar);
@@ -126,10 +137,10 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingRoom8 = findViewById(R.id.radioButton_room8);
         mMeetingRoom9 = findViewById(R.id.radioButton_room9);
         mMeetingRoom10 = findViewById(R.id.radioButton_room10);
-        mUpdateButton = findViewById(R.id.create);
         mMeetingParticipantsListTitle = findViewById(R.id.participants_list_title);
         mMeetingParticipants = findViewById(R.id.participants_list_text);
         mMeetingFirstSubject = findViewById(R.id.meeting_id);
+        mUpdateButton = findViewById(R.id.create);
     }
 
     private void setMeetingInfo(Meeting meeting) {
@@ -197,9 +208,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.participants_list_text);
         recyclerView.setLayoutManager(layoutManager);
-
         ParticipantRecyclerViewAdapter mAdapter = new ParticipantRecyclerViewAdapter(arrayOfParticipants);
-
         // Set CustomAdapter as the adapter for RecyclerView
         recyclerView.setAdapter(mAdapter);
     }
@@ -211,7 +220,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
             Participant participantMail = new Participant(email);
             arrayOfParticipants.add(participantMail);
         }
-
     }
 
     public void showParticipantsList() {
@@ -227,11 +235,14 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         arrayOfParticipants.add(participant);
         mParticipantInput.getText().clear();
         mParticipantsLayout.setError(null);
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.meeting_fields_page), "Participant ajouté avec succès", Snackbar.LENGTH_SHORT);
+        // Show
+        snackbar.show();
     }
 
     /**
-     * Check if Participants List is not Empty
-     * Used when Create Button is pressed
+     * Check if Participants List is not Empty (Used when Create Button is pressed)
      */
     private boolean checkIfParticipantListIsNotEmpty() {
         if (arrayOfParticipants.isEmpty()) {
@@ -274,12 +285,20 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         return emailList.toString();
     }
 
+    private void setUpdateButtonListener() {
+        mUpdateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateMeeting();
+            }
+        });
+    }
 
     /**
      * Send form values to update meeting after fields validation & close add activity
      */
-    @OnClick(R.id.create)
     void updateMeeting() {
+        MeetingApiService mApiService = DI.getMeetingApiService();
         mMeetingId = getMeetingInfo().getId();
         for (Meeting meeting : mApiService.getMeetings()) {
             if (meeting.getId() == mMeetingId) {
@@ -290,10 +309,14 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                 meeting.setDescription(mMeetingDescriptionLayout.getEditText().getText().toString());
                 break;
             }
-            finish();
         }
         if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingDateLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
+            Toast.makeText(UpdateMeetingActivity.this, "Vos modifications ont bien été enregistrées", Toast.LENGTH_LONG).show();
+            Meeting meeting = getMeetingInfo();
             finish();
+            Intent meetingDetailActivityIntent = new Intent(UpdateMeetingActivity.this, MeetingDetailsActivity.class);
+            meetingDetailActivityIntent.putExtra("MEETING_ID", meeting.getId());
+            UpdateMeetingActivity.this.startActivity(meetingDetailActivityIntent);
         }
 
     }

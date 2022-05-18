@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.mareu.R;
@@ -55,6 +57,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
             public void onClick(View v) {
                 // Delete meeting from global List
                 EventBus.getDefault().post(new DeleteMeetingEvent(meeting));
+                Toast.makeText(v.getContext(), "La réunion intitulée \"" + meeting.getSubject() + "\" a bien été supprimée", Toast.LENGTH_LONG).show();
             }
         });
 
