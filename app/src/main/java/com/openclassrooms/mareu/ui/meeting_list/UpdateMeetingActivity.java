@@ -61,8 +61,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private ImageView mMeetingColor;
     private MeetingApiService mApiService;
     private MaterialButton mUpdateButton;
-    private ImageButton mDeleteButton;
     private TextView mMeetingFirstSubject;
+    private long mMeetingId;
 
     private final ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
 
@@ -71,13 +71,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_meeting);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        MeetingApiService mApiService = DI.getMeetingApiService();
 
-        Intent getProfileIntent = getIntent();
-        long id = getProfileIntent.getLongExtra("MEETING_ID",-1);
-        Meeting meeting = mApiService.getMeetingData(id);
-
-
+        Meeting meeting = getMeetingInfo();
         getViews();
         setMeetingInfo(meeting);
         initRecyclerView();
@@ -99,6 +94,15 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private Meeting getMeetingInfo() {
+        MeetingApiService mApiService = DI.getMeetingApiService();
+        Intent getProfileIntent = getIntent();
+        mMeetingId = getProfileIntent.getLongExtra("MEETING_ID",-1);
+        Meeting meeting = mApiService.getMeetingData(mMeetingId);
+        return meeting;
+    }
+
 
     private void getViews() {
         mMeetingColor = findViewById(R.id.avatar);
@@ -123,7 +127,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingRoom9 = findViewById(R.id.radioButton_room9);
         mMeetingRoom10 = findViewById(R.id.radioButton_room10);
         mUpdateButton = findViewById(R.id.create);
-        mDeleteButton = findViewById(R.id.item_list_delete_button);
         mMeetingParticipantsListTitle = findViewById(R.id.participants_list_title);
         mMeetingParticipants = findViewById(R.id.participants_list_text);
         mMeetingFirstSubject = findViewById(R.id.meeting_id);
@@ -273,12 +276,24 @@ public class UpdateMeetingActivity extends AppCompatActivity {
 
 
     /**
-     * Send form values to create a new meeting after fields validation & close add activity
-     * @return
+     * Send form values to update meeting after fields validation & close add activity
      */
     @OnClick(R.id.create)
     void updateMeeting() {
-        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingDateLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
+        mMeetingId = getMeetingInfo().getId();
+        for (Meeting meeting : mApiService.getMeetings()) {
+            if (meeting.getId() == mMeetingId) {
+                meeting.setDate(mMeetingDateLayout.getEditText().getText().toString());
+                meeting.setSubject(mMeetingSubjectLayout.getEditText().getText().toString());
+                meeting.setRoomName(getRoomValue());
+                meeting.setParticipants(getEmailList());
+                meeting.setDescription(mMeetingDescriptionLayout.getEditText().getText().toString());
+                break;
+            }
         }
+        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingDateLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
+            finish();
+        }
+
     }
 }

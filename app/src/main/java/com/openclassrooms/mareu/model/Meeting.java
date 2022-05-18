@@ -1,6 +1,5 @@
 package com.openclassrooms.mareu.model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**

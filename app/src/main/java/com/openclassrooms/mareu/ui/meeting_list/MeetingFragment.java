@@ -20,12 +20,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class MeetingFragment extends Fragment {
 
     private MeetingApiService mApiService;
-    private List<Meeting> mMeetings;
     private RecyclerView mRecyclerView;
 
     /**
@@ -33,8 +33,7 @@ public class MeetingFragment extends Fragment {
      * @return @{@link MeetingFragment}
      */
     public static MeetingFragment newInstance() {
-        MeetingFragment fragment = new MeetingFragment();
-        return fragment;
+        return new MeetingFragment();
     }
 
     @Override
@@ -50,7 +49,7 @@ public class MeetingFragment extends Fragment {
         Context context = view.getContext();
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext()), DividerItemDecoration.VERTICAL));
         return view;
     }
 
@@ -58,7 +57,7 @@ public class MeetingFragment extends Fragment {
      * Init the List of meetings
      */
     private void initList() {
-        mMeetings = mApiService.getMeetings();
+        List<Meeting> mMeetings = mApiService.getMeetings();
         mRecyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetings, this.getClass().getName()));
     }
 
@@ -82,7 +81,6 @@ public class MeetingFragment extends Fragment {
 
     /**
      * Fired if the user clicks on a delete button in Meeting List
-     * @param event
      */
     @Subscribe
     public void onDeleteMeeting(DeleteMeetingEvent event) {

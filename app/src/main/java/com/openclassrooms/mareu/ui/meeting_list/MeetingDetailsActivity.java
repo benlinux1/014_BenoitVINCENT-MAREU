@@ -1,7 +1,6 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,9 +20,11 @@ import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
 
+import java.util.Objects;
+
 public class MeetingDetailsActivity extends AppCompatActivity {
 
-    private FloatingActionButton mDeleteButton;
+    private FloatingActionButton mEditButton;
     private ImageView mMeetingColor;
     private TextView mMeetingSubtitle;
     private TextView mMeetingDate;
@@ -36,40 +37,20 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_details);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getMeetingApiService();
 
-        /**
-         * Set Meeting informations
-         */
         setMeetingData();
-        Meeting meeting = setMeetingData();
 
-        /**
-         * Listener on Favorite's Button to add/remove neighbour in/from Favorites List
-         * Modify the favorite's button design (empty / full) according to the situation too
-         */
-        mDeleteButton.setOnClickListener(new View.OnClickListener() {
-
-            /**
-             * Toggle neighbour's favorite attribute
-             * Toggle the favorite's button design (empty / full) according to the situation
-             * Displays alertDialog Box according to the situation
-             * */
-            @Override
-            public void onClick(View view) {
-                createCustomDialogBox(" Voulez vous vraiment modifier cette réunion ?");
-            }
-       });
+        // Listener on Update Button to launch alert box & confirm update
+        mEditButton.setOnClickListener(view -> createCustomDialogBox(" Voulez vous vraiment modifier cette réunion ?"));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home : {
-                finish();
-                return true;
-            }
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -84,9 +65,9 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         Meeting meeting = mApiService.getMeetingData(id);
 
         getViews();
-        setMeetingColor(meeting);
+        setMeetingBackground();
         setMeetingInfo(meeting);
-        setDeleteButton(meeting);
+        setEditButton();
 
         return meeting;
     }
@@ -98,13 +79,13 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingDate = findViewById(R.id.meeting_detail_date);
         mMeetingParticipants = findViewById(R.id.meeting_detail_participants_list);
         mMeetingDescription = findViewById(R.id.meeting_detail_description);
-    };
+    }
 
-    public void setMeetingColor(Meeting meeting) {
+    public void setMeetingBackground() {
         Glide.with(mMeetingColor.getContext())
-                .load(R.mipmap.ic_mario_foreground)
-                .centerCrop()
-                .into(mMeetingColor);
+            .load(R.mipmap.ic_mario_foreground)
+            .centerCrop()
+            .into(mMeetingColor);
     }
 
     @SuppressLint("SetTextI18n")
@@ -116,11 +97,8 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingDescription.setText(meeting.getDescription());
     }
 
-    public void setDeleteButton(Meeting meeting) {
-        mDeleteButton = findViewById(R.id.meeting_detail_update_button);
-        // Set Favorite Button color according to the situation
-
-
+    public void setEditButton() {
+        mEditButton = findViewById(R.id.meeting_detail_update_button);
     }
 
     /**
@@ -134,22 +112,14 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         builder.setCancelable(false);
         builder.setMessage(message);
 
-        builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Meeting meeting = setMeetingData();
-                Intent updateMeetingActivityIntent = new Intent(MeetingDetailsActivity.this, UpdateMeetingActivity.class);
-                updateMeetingActivityIntent.putExtra("MEETING_ID", meeting.getId());
-                MeetingDetailsActivity.this.startActivity(updateMeetingActivityIntent);
-            }
+        builder.setPositiveButton("OUI", (dialog, which) -> {
+            Meeting meeting = setMeetingData();
+            Intent updateMeetingActivityIntent = new Intent(MeetingDetailsActivity.this, UpdateMeetingActivity.class);
+            updateMeetingActivityIntent.putExtra("MEETING_ID", meeting.getId());
+            MeetingDetailsActivity.this.startActivity(updateMeetingActivityIntent);
         });
 
-        builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton("NON", (dialog, which) -> dialog.cancel());
         // Create the Alert dialog
         AlertDialog alertDialog = builder.create();
 
@@ -160,13 +130,15 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
         );
 
+        // Set layout & buttons margin
         params.setMargins(40,0,0,0);
         positiveButton.setLayoutParams(params);
 
+        // Center buttons removing original leftSpacer
         LinearLayout parent = (LinearLayout) positiveButton.getParent();
         parent.setGravity(Gravity.CENTER_HORIZONTAL);
         View leftSpacer = parent.getChildAt(1);
@@ -174,6 +146,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
 
         // Center DialogBox Message
         TextView messageText = (TextView) alertDialog.findViewById(android.R.id.message);
+        assert messageText != null;
         messageText.setGravity(Gravity.CENTER);
     }
 

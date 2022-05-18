@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class ValidationService {
 
     public static boolean validateTextInput(String subject, TextInputLayout subjectError) {
-        String subjectRegex = "^[a-zA-Zéèàêîïôö ]*$";
+        String subjectRegex = "^[a-zA-Z0-9éèàêîïôö ]*$";
         if (subject.matches(subjectRegex) && (subject.trim().length() > 2))  {
             subjectError.setError(null);
             return true;
