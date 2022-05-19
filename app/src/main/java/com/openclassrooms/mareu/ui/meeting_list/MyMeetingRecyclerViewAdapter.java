@@ -45,7 +45,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
         Meeting meeting = mMeetings.get(position);
         holder.mMeetingSubject.setText(meeting.getSubject() + " -");
         holder.mMeetingDate.setText(dateFormat.format(meeting.getDate()) + " -");

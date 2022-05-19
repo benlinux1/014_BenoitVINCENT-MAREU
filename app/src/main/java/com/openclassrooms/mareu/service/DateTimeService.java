@@ -1,5 +1,6 @@
 package com.openclassrooms.mareu.service;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -10,6 +11,7 @@ import android.widget.TimePicker;
 
 import com.openclassrooms.mareu.ui.meeting_list.AddMeetingActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,11 +20,11 @@ public class DateTimeService {
 
     private static Calendar date;
 
-    public static Date getDate(EditText dateInput, Context context) {
+    public static void setDate(EditText dateInput, Context context) {
         final Calendar currentDate = Calendar.getInstance();
         date = Calendar.getInstance();
 
-        // Date Select Listener.
+        // Date Select Listener
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
@@ -32,12 +34,21 @@ public class DateTimeService {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         date.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         date.set(Calendar.MINUTE, minute);
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
+                        // Format & set date + time in meeting date field
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
                         dateInput.setText(dateFormat.format(date.getTime()));
                     }
                 }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), true).show();
             }
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
-        return date.getTime();
+    }
+
+    public static Date getDate(String dateString) throws ParseException {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
+        Date date = dateFormat.parse(dateString);
+        Calendar cal = Calendar.getInstance();
+        assert date != null;
+        cal.setTime(date);
+        return date;
     }
 }

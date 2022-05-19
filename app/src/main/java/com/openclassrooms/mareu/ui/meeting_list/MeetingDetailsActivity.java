@@ -90,7 +90,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     }
 
     public void setMeetingInfo(Meeting meeting) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
         mMeetingSubtitle.setText(meeting.getSubject());
         mMeetingDate.setText("Le " + dateFormat.format(meeting.getDate()));
         mMeetingRoom.setText("Salle " + "\"" + meeting.getRoomName() + "\"");

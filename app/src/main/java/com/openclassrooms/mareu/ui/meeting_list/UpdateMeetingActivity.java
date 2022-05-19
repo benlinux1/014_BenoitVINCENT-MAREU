@@ -1,14 +1,11 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.button.MaterialButton;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,22 +24,15 @@ import android.widget.Toast;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
-import com.openclassrooms.mareu.events.DeleteMeetingEvent;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.model.Participant;
 import com.openclassrooms.mareu.service.DateTimeService;
 import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 
-import org.greenrobot.eventbus.EventBus;
-
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import butterknife.OnClick;
 
 public class UpdateMeetingActivity extends AppCompatActivity {
 
@@ -73,7 +62,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private MeetingApiService mApiService;
     private MaterialButton mUpdateButton;
     private long mMeetingId;
-
     private final ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
 
     @Override
@@ -158,14 +146,10 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private void listenToDate() {
         mMeetingDate.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                DateTimeService.getDate(mMeetingDate, UpdateMeetingActivity.this);
+                DateTimeService.setDate(mMeetingDate, UpdateMeetingActivity.this);
             }
+            mUpdateButton.setEnabled(true);
         });
-    }
-
-    private Date getMeetingDate(){
-        Date meetingDate = DateTimeService.getDate(mMeetingDate, UpdateMeetingActivity.this);
-        return meetingDate;
     }
 
     private void setMeetingRoomChecked(Meeting meeting) {
@@ -207,7 +191,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                 mailEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
+                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
                             Participant participant = new Participant(s.toString());
                             addParticipant(participant);
                             actionButton.setEnabled(true);
@@ -317,7 +301,11 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mMeetingId = getMeetingInfo().getId();
         for (Meeting meeting : mApiService.getMeetings()) {
             if (meeting.getId() == mMeetingId) {
-                meeting.setDate(getMeetingDate());
+                try {
+                    meeting.setDate(DateTimeService.getDate(mMeetingDateLayout.getEditText().getText().toString()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 meeting.setSubject(mMeetingSubjectLayout.getEditText().getText().toString());
                 meeting.setRoomName(getRoomValue());
                 meeting.setParticipants(getEmailList());

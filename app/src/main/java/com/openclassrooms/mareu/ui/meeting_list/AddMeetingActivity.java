@@ -1,5 +1,8 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
+import static com.openclassrooms.mareu.service.DateTimeService.getDate;
+
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +37,7 @@ import com.openclassrooms.mareu.service.MeetingApiService;
 import com.openclassrooms.mareu.service.ValidationService;
 import com.openclassrooms.mareu.service.ColorService;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,6 +84,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     private boolean isChecking = true;
     private int mCheckedId = R.id.radioButton_room1;
     private ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
+    private Date mMeetingDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         checkIfEmailIsValid(participantsLayout, participantInput, addButton);
         ValidationService.textInputValidation(descriptionInput, descriptionInputLayout, addButton);
         listenToDate();
+
     }
 
     @Override
@@ -111,15 +117,11 @@ public class AddMeetingActivity extends AppCompatActivity {
     private void listenToDate() {
         date.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                DateTimeService.getDate(date, AddMeetingActivity.this);
+                DateTimeService.setDate(date, AddMeetingActivity.this);
             }
         });
     }
 
-    private Date getMeetingDate(){
-        Date meetingDate = DateTimeService.getDate(date, AddMeetingActivity.this);
-        return meetingDate;
-    }
 
 
     /**
@@ -244,15 +246,20 @@ public class AddMeetingActivity extends AppCompatActivity {
      */
     @OnClick(R.id.create)
     void addMeeting() {
-        Meeting meeting = new Meeting(
-                System.currentTimeMillis(), //meeting id
-                Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(), //meeting subject
-                mAvatarColor, //meeting color
-                getMeetingDate(), //meeting date
-                getRoomValue(), //meeting room
-                getEmailList(), //meeting participants
-                Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description
-        );
+        Meeting meeting = null;
+        try {
+            meeting = new Meeting(
+                    System.currentTimeMillis(), //meeting id
+                    Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(), //meeting subject
+                    mAvatarColor, //meeting color
+                    DateTimeService.getDate(date.getText().toString()), //meeting date
+                    getRoomValue(), //meeting room
+                    getEmailList(), //meeting participants
+                    Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(subjectLayout, participantsList, participantsLayout, descriptionInputLayout)) {
             mApiService.createMeeting(meeting);
             Toast.makeText(AddMeetingActivity.this, "Réunion créée avec succès", Toast.LENGTH_LONG).show();

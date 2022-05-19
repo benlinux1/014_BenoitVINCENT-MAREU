@@ -7,8 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.openclassrooms.mareu.model.Meeting;
 
 
 public class ValidationService {
@@ -40,7 +43,7 @@ public class ValidationService {
             subjectLayout.setError("Merci de compléter ce champ");
         }
         else if (participantsList.toString().equals("")) {
-            participantsLayout.setError("Merci de compléter ce champ");
+            participantsLayout.setError("Merci de valider au moins 1 participant");
         }
         else if (descriptionInput.getEditText().getText().toString().equals("")) {
             descriptionInput.setError("Merci de compléter ce champ");
