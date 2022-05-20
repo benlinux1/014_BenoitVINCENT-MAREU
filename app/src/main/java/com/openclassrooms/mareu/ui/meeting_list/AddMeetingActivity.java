@@ -100,7 +100,6 @@ public class AddMeetingActivity extends AppCompatActivity {
         checkIfEmailIsValid(participantsLayout, participantInput, addButton);
         ValidationService.textInputValidation(descriptionInput, descriptionInputLayout, addButton);
         listenToDate();
-
     }
 
     @Override
@@ -121,8 +120,6 @@ public class AddMeetingActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     /**
      * Listener on participant email input. Send participant email (if valid) in participants List when "Done" is pressed

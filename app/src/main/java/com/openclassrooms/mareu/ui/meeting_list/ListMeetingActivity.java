@@ -1,5 +1,6 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,12 +11,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
+import com.openclassrooms.mareu.service.ValidationService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +38,21 @@ public class ListMeetingActivity extends AppCompatActivity {
     Toolbar mToolbar;
     @BindView(R.id.list_meetings)
     RecyclerView mRecyclerView;
+
+    private RadioGroup mFirstGroup;
+    private RadioGroup mSecondGroup;
+    private RadioButton mMeetingRoom1;
+    private RadioButton mMeetingRoom2;
+    private RadioButton mMeetingRoom3;
+    private RadioButton mMeetingRoom4;
+    private RadioButton mMeetingRoom5;
+    private RadioButton mMeetingRoom6;
+    private RadioButton mMeetingRoom7;
+    private RadioButton mMeetingRoom8;
+    private RadioButton mMeetingRoom9;
+    private RadioButton mMeetingRoom10;
+    private boolean isChecking = true;
+    private int mCheckedId = R.id.radioButton_room1;
 
     private List<Meeting> mMeetingsList = new ArrayList<>();
     private MeetingApiService mApiService = DI.getMeetingApiService();
@@ -104,8 +124,26 @@ public class ListMeetingActivity extends AppCompatActivity {
 
     private void roomDialog() {
 
-    }
+        AlertDialog.Builder dialog = new AlertDialog.Builder( ListMeetingActivity.this );
+        final View dialogView = getLayoutInflater().inflate(R.layout.room_filter_dialog, null);
+        dialog.setView(dialogView);
+        dialog.show();
+        mFirstGroup = dialogView.findViewById(R.id.radioGroup_1_to_5);
+        mSecondGroup = dialogView.findViewById(R.id.radioGroup_6_to_10);
+        mMeetingRoom1 = dialogView.findViewById(R.id.radioButton_room1);
+        mMeetingRoom2 = dialogView.findViewById(R.id.radioButton_room2);
+        mMeetingRoom3 = dialogView.findViewById(R.id.radioButton_room3);
+        mMeetingRoom4 = dialogView.findViewById(R.id.radioButton_room4);
+        mMeetingRoom5 = dialogView.findViewById(R.id.radioButton_room5);
+        mMeetingRoom6 = dialogView.findViewById(R.id.radioButton_room6);
+        mMeetingRoom7 = dialogView.findViewById(R.id.radioButton_room7);
+        mMeetingRoom8 = dialogView.findViewById(R.id.radioButton_room8);
+        mMeetingRoom9 = dialogView.findViewById(R.id.radioButton_room9);
+        mMeetingRoom10 = dialogView.findViewById(R.id.radioButton_room10);
+        ValidationService.checkIfRoomIsChecked(mFirstGroup, mSecondGroup);
 
+
+    }
 
 
 
@@ -120,6 +158,10 @@ public class ListMeetingActivity extends AppCompatActivity {
         adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+
+
+
 
     }
 
