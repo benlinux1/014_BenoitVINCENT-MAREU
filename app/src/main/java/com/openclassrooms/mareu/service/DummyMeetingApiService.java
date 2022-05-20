@@ -80,14 +80,14 @@ public class DummyMeetingApiService implements MeetingApiService {
 
 
     /**
-     * Get the free meeting rooms list by name
+     * Get the meeting list according to selected Room Filter
      */
     @Override
-    public List<Meeting> getFreeMeetingsListByName() {
+    public List<Meeting> getMeetingsListFilteredByRoomName(String roomName) {
         List<Meeting> freeMeetingRooms = new ArrayList<>();
-        for (Meeting meeting : getMeetings())
-            if (meeting.isFree()) {
-                freeMeetingRooms.add(meeting);
+        for (int i = 0; i < meetings.size(); i++)
+            if (meetings.get(i).getRoomName().equals(roomName)) {
+                freeMeetingRooms.add(meetings.get(i));
             }
         return freeMeetingRooms;
     }

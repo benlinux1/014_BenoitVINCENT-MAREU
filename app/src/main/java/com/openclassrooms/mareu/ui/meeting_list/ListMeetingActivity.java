@@ -2,19 +2,24 @@ package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
@@ -124,10 +129,43 @@ public class ListMeetingActivity extends AppCompatActivity {
 
     private void roomDialog() {
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder( ListMeetingActivity.this );
+        AlertDialog.Builder builder = new AlertDialog.Builder( ListMeetingActivity.this );
         final View dialogView = getLayoutInflater().inflate(R.layout.room_filter_dialog, null);
-        dialog.setView(dialogView);
-        dialog.show();
+        builder.setView(dialogView);
+
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Valider", (dialog, which) -> {
+            mApiService.getMeetingsListFilteredByRoomName(getRoomValue());
+        });
+
+        builder.setNegativeButton("Retour", (dialog, which) -> dialog.cancel());
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+
+        // Show the Alert Dialog box
+        alertDialog.show();
+
+        // Center DialogBox Button
+        Button positiveButton = alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        // Set layout & buttons margin
+        params.setMargins(40,0,0,0);
+        positiveButton.setLayoutParams(params);
+
+        // Center buttons removing original leftSpacer
+        LinearLayout parent = (LinearLayout) positiveButton.getParent();
+        parent.setGravity(Gravity.CENTER_HORIZONTAL);
+        View leftSpacer = parent.getChildAt(1);
+        leftSpacer.setVisibility(View.GONE);
+
+
         mFirstGroup = dialogView.findViewById(R.id.radioGroup_1_to_5);
         mSecondGroup = dialogView.findViewById(R.id.radioGroup_6_to_10);
         mMeetingRoom1 = dialogView.findViewById(R.id.radioButton_room1);
@@ -142,9 +180,26 @@ public class ListMeetingActivity extends AppCompatActivity {
         mMeetingRoom10 = dialogView.findViewById(R.id.radioButton_room10);
         ValidationService.checkIfRoomIsChecked(mFirstGroup, mSecondGroup);
 
-
     }
 
+    /**
+     * Used to get the room name checked in the list
+     */
+    private String getRoomValue() {
+        int selectedRadioButtonIDinGroup1 = mFirstGroup.getCheckedRadioButtonId();
+        int selectedRadioButtonIDinGroup2 = mSecondGroup.getCheckedRadioButtonId();
+
+        // If nothing is selected from Radio Group, then it return -1
+        if (selectedRadioButtonIDinGroup1 != -1) {
+            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup1);
+            String selectedRadioButtonText1 = selectedRadioButton.getText().toString();
+            return selectedRadioButtonText1;
+        } else { // it means that button is checked in Group 2
+            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup2);
+            String selectedRadioButtonText2 = selectedRadioButton.getText().toString();
+            return selectedRadioButtonText2;
+        }
+    }
 
 
     @Override

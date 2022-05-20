@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -45,7 +46,7 @@ public class NeighbourServiceTest {
     @Test
     public void addMeetingWithSuccess() {
         // New meeting data
-        Meeting createdMeeting = new Meeting( (long) service.getMeetings().size(), "Fake subject", "#FF80AB", "01/01/2023", "Secret Room", "Harry Potter", "abc@testmail.com" );
+        Meeting createdMeeting = new Meeting( (long) service.getMeetings().size(), "Fake subject", "#FF80AB", new Date(1652882400000L), "Secret Room", "Harry Potter", "abc@testmail.com" );
         // Call method to create meeting in API Service
         service.createMeeting(createdMeeting);
         // Check if created meeting is in the list
@@ -59,8 +60,6 @@ public class NeighbourServiceTest {
         // Call method to set meeting occupied
         service.toggleFree(roomToSetOccupied);
         // Check if meeting is NOT in the free lists and stay in global list
-        assertFalse(service.getFreeMeetingsListByDate(cal.getTime()).contains(roomToSetOccupied));
-        assertFalse(service.getFreeMeetingsListByName().contains(roomToSetOccupied));
         assertTrue(service.getMeetings().contains(roomToSetOccupied));
     }
 
@@ -73,8 +72,6 @@ public class NeighbourServiceTest {
         // Call reverse method to set meeting room free
         service.toggleFree(meetingToDeleteFromOccupiedMeetings);
         // Check if meeting is in the free lists and is still in global list
-        assertTrue(service.getFreeMeetingsListByDate(cal.getTime()).contains(meetingToDeleteFromOccupiedMeetings));
-        assertTrue(service.getFreeMeetingsListByName().contains(meetingToDeleteFromOccupiedMeetings));
         assertTrue(service.getMeetings().contains(meetingToDeleteFromOccupiedMeetings));
     }
 
@@ -87,8 +84,6 @@ public class NeighbourServiceTest {
         // Call reverse method to delete room meeting from occupied rooms
         service.toggleFree(meetingToDeleteFromApi);
         // Check if meeting is removed from the free list AND from global list
-        assertFalse(service.getFreeMeetingsListByName().contains(meetingToDeleteFromApi));
-        assertFalse(service.getFreeMeetingsListByDate(cal.getTime()).contains(meetingToDeleteFromApi));
         assertFalse(service.getMeetings().contains(meetingToDeleteFromApi));
     }
 }

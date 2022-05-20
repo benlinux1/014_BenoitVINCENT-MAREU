@@ -46,7 +46,7 @@ public interface MeetingApiService {
      * Get all Free Meetings Dates by RoomName
      * @return {@link List}
      */
-    List<Meeting> getFreeMeetingsListByName();
+    List<Meeting> getMeetingsListFilteredByRoomName(String roomName);
 
     /**
      * Set / unset neighbour in / from favorites list
