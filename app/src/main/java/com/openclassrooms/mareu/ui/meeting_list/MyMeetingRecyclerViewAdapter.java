@@ -27,12 +27,10 @@ import butterknife.ButterKnife;
 
 public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Meeting> mMeetings;
-    private final String actualPage;
+    private List<Meeting> mMeetings;
 
-    public MyMeetingRecyclerViewAdapter(List<Meeting> items, String actualPage) {
+    public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
-        this.actualPage = actualPage;
     }
 
     @NonNull

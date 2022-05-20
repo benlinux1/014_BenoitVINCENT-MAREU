@@ -2,7 +2,10 @@ package com.openclassrooms.mareu.service;
 
 import com.openclassrooms.mareu.model.Meeting;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -56,17 +59,25 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     /**
      * Get the free meeting rooms list by date
-     * @param time
+     * @param date
+     * @return {@link List}
      */
     @Override
-    public List<Meeting> getFreeMeetingsListByDate(Date time) {
-        List<Meeting> freeMeetingRooms = new ArrayList<>();
-        for (Meeting meeting : getMeetings())
-            if (meeting.isFree()) {
-                freeMeetingRooms.add(meeting);
-            }
-        return freeMeetingRooms;
+    public List<Meeting> getMeetingsFilteredListByDate(Date date) {
+        List<Meeting> meetingListByDate = new ArrayList<>();
+        Calendar selectedDate = Calendar.getInstance();
+        selectedDate.setTime(date);
+        for (int i = 0; i < meetings.size(); i++) {
+            Calendar meetingDate = Calendar.getInstance();
+            meetingDate.setTime(meetings.get(i).getDate());
+            boolean sameDay = selectedDate.get(Calendar.DAY_OF_YEAR) == meetingDate.get(Calendar.DAY_OF_YEAR) &&
+                    selectedDate.get(Calendar.YEAR) == meetingDate.get(Calendar.YEAR);
+            if (sameDay)
+                meetingListByDate.add(meetings.get(i));
+        }
+        return meetingListByDate;
     }
+
 
     /**
      * Get the free meeting rooms list by name
@@ -83,7 +94,7 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     /**
      * Set / unset neighbour in / from favorites list
-     * {@param neighbour}
+     * {@param meeting}
      */
     @Override
     public void toggleFree(Meeting meeting) {
@@ -93,10 +104,4 @@ public class DummyMeetingApiService implements MeetingApiService {
             meeting.setFree(true);
         }
     }
-
-    @Override
-    public void updateMeeting(Meeting meetingToUpdate, int index) {
-        meetings.set(index, meetingToUpdate);
-    }
-
 }

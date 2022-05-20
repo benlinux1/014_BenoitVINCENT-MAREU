@@ -38,9 +38,9 @@ public interface MeetingApiService {
     /**
      * Get all Free Meetings Rooms by Date
      * @return {@link List}
-     * @param time
+     * @param date
      */
-    List<Meeting> getFreeMeetingsListByDate(Date time);
+    List<Meeting> getMeetingsFilteredListByDate(Date date);
 
     /**
      * Get all Free Meetings Dates by RoomName
@@ -53,11 +53,5 @@ public interface MeetingApiService {
      * @param meeting
      */
     void toggleFree(Meeting meeting);
-
-    /**
-     * Create a meeting
-     * @param meeting
-     */
-    void updateMeeting(Meeting meeting, int index);
 
 }

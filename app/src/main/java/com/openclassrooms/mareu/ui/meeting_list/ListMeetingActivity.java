@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,12 +31,13 @@ public class ListMeetingActivity extends AppCompatActivity {
     // UI Components
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.container)
-    ViewPager mViewPager;
+    @BindView(R.id.list_meetings)
+    RecyclerView mRecyclerView;
 
-    ListMeetingPagerAdapter mPagerAdapter;
     private List<Meeting> mMeetingsList = new ArrayList<>();
     private MeetingApiService mApiService = DI.getMeetingApiService();
+    MyMeetingRecyclerViewAdapter adapter;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,6 +53,9 @@ public class ListMeetingActivity extends AppCompatActivity {
             case R.id.filter_date:
                 dateDialog();
                 return true;
+            case R.id.filter_room:
+                roomDialog();
+                return true;
             case R.id.filter_reset:
                 resetFilter();
                 return true;
@@ -62,14 +67,15 @@ public class ListMeetingActivity extends AppCompatActivity {
     private void resetFilter() {
         mMeetingsList.clear();
         mMeetingsList.addAll(mApiService.getMeetings());
-        mPagerAdapter = new ListMeetingPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
-        Objects.requireNonNull(mViewPager.getAdapter()).notifyDataSetChanged();;
+        adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+        mRecyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
     }
 
     private void dateDialog() {
         int selectedYear = 2022;
-        int selectedMonth = 05;
+        int selectedMonth = 04;
         int selectedDayOfMonth = 18;
 
         // Date Select Listener
@@ -80,12 +86,12 @@ public class ListMeetingActivity extends AppCompatActivity {
                 Calendar cal = Calendar.getInstance();
                 cal.set(i, i1, i2);
                 mMeetingsList.clear();
-                mMeetingsList.addAll(mApiService.getFreeMeetingsListByDate(cal.getTime()));
-                mPagerAdapter = new ListMeetingPagerAdapter(getSupportFragmentManager());
-                mViewPager.setAdapter(mPagerAdapter);
-                Objects.requireNonNull(mViewPager.getAdapter()).notifyDataSetChanged();;
-            }
+                mMeetingsList = mApiService.getMeetingsFilteredListByDate(cal.getTime());
+                adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+                mRecyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
 
+            }
         };
 
         // Create DatePickerDialog (Spinner Mode):
@@ -96,6 +102,13 @@ public class ListMeetingActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    private void roomDialog() {
+
+    }
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +116,11 @@ public class ListMeetingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
-        mPagerAdapter = new ListMeetingPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
+        mMeetingsList.addAll(mApiService.getMeetings());
+        adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+        mRecyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
     }
 
     @OnClick(R.id.add_meeting)
