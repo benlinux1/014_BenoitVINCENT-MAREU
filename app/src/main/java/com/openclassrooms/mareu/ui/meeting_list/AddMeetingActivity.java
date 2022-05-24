@@ -102,10 +102,14 @@ public class AddMeetingActivity extends AppCompatActivity {
         listenToDate();
     }
 
+    /**
+     * Close form and go to list of meetings if back button is clicked
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home : {
+                ListMeetingActivity.navigate(this);
                 finish();
                 return true;
             }
@@ -113,6 +117,9 @@ public class AddMeetingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Listener on date field which display selected date
+     */
     private void listenToDate() {
         date.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -261,6 +268,7 @@ public class AddMeetingActivity extends AppCompatActivity {
             mApiService.createMeeting(meeting);
             Toast.makeText(AddMeetingActivity.this, "Réunion créée avec succès", Toast.LENGTH_LONG).show();
             finish();
+            ListMeetingActivity.navigate(this);
         }
     }
 

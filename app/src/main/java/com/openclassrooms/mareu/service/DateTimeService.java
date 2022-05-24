@@ -15,14 +15,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateTimeService {
 
     private static Calendar date;
 
+    /**
+     * Launch calendar instance with current date, and send formatted date to date input
+     */
     public static void setDate(EditText dateInput, Context context) {
-        final Calendar currentDate = Calendar.getInstance();
-        date = Calendar.getInstance();
+        final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+        date = Calendar.getInstance(Locale.FRANCE);
 
         // Date Select Listener
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
@@ -43,6 +47,11 @@ public class DateTimeService {
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
     }
 
+    /**
+     * Get date from string with parsing
+     * @param dateString
+     * @return Date
+     */
     public static Date getDate(String dateString) throws ParseException {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
         Date date = dateFormat.parse(dateString);

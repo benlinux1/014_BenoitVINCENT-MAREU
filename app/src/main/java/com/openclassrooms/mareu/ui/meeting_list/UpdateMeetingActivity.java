@@ -72,7 +72,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         Meeting meeting = getMeetingInfo();
         getViews();
         setMeetingInfo(meeting);
-        initRecyclerView();
+        initParticipantsRecyclerView();
         showParticipantsList();
         setMeetingRoomChecked(meeting);
         ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
@@ -83,6 +83,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         setUpdateButtonListener();
     }
 
+    /**
+     * Close form and go to meeting details if back button is clicked
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -98,6 +101,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Get meeting informations according to the ID passed from Intent
+     */
     private Meeting getMeetingInfo() {
         MeetingApiService mApiService = DI.getMeetingApiService();
         Intent getProfileIntent = getIntent();
@@ -106,6 +112,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         return meeting;
     }
 
+    /**
+     * Get all form views
+     */
     private void getViews() {
         mMeetingColor = findViewById(R.id.avatar);
         mMeetingSubjectLayout = findViewById(R.id.add_subject_layout);
@@ -133,6 +142,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mUpdateButton = findViewById(R.id.create);
     }
 
+    /**
+     * Pre complete fields with meeting informations
+     */
     private void setMeetingInfo(Meeting meeting) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
         mMeetingColor.setColorFilter(Color.parseColor(meeting.getAvatarColor()));
@@ -143,6 +155,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         setParticipants(meeting);
     }
 
+    /**
+     * Set date & time in date field when user pick a date in calendar
+     */
     private void listenToDate() {
         mMeetingDate.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -152,6 +167,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Check the right radio button according to original meeting room
+     */
     private void setMeetingRoomChecked(Meeting meeting) {
         String roomName = meeting.getRoomName();
         switch (roomName) {
@@ -178,6 +196,9 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Email validation with text changed listener when user press "Done" on keyboard in order to add new participant
+     */
     private void checkIfEmailIsValid(TextInputLayout mailInputLayout, EditText mailEditText, MaterialButton actionButton) {
         mailInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -203,15 +224,20 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         });
     }
 
-    private void initRecyclerView() {
+    /**
+     * Display a custom recycler view for participants
+     */
+    private void initParticipantsRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.participants_list_text);
         recyclerView.setLayoutManager(layoutManager);
         ParticipantRecyclerViewAdapter mAdapter = new ParticipantRecyclerViewAdapter(arrayOfParticipants);
-        // Set CustomAdapter as the adapter for RecyclerView
         recyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * Format participants list for participants recycler view
+     */
     public void setParticipants(Meeting meeting) {
         String emailList = meeting.getParticipants();
         String[] emails = emailList.split("; ");
@@ -221,22 +247,24 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Show participants list and title "E-mail des participants"
+     */
     public void showParticipantsList() {
         mMeetingParticipantsListTitle.setVisibility(View.VISIBLE);
         mMeetingParticipants.setVisibility(View.VISIBLE);
     }
 
     /**
-     * Add the participant email when added in selected input
+     * Add the participant email in custom recycler view when added in selected input
      */
     public void addParticipant(Participant participant) {
-        initRecyclerView();
+        initParticipantsRecyclerView();
         arrayOfParticipants.add(participant);
         mParticipantInput.getText().clear();
         mParticipantsLayout.setError(null);
         Snackbar snackbar = Snackbar
                 .make(findViewById(R.id.meeting_fields_page), "Participant ajouté avec succès", Snackbar.LENGTH_SHORT);
-        // Show
         snackbar.show();
     }
 
@@ -294,7 +322,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     }
 
     /**
-     * Send form values to update meeting after fields validation & close add activity
+     * Send form values to model in order to update meeting after fields validation. Then close activity.
      */
     void updateMeeting() {
         MeetingApiService mApiService = DI.getMeetingApiService();

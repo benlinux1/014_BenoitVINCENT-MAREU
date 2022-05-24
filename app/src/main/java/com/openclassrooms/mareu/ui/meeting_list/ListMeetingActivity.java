@@ -2,10 +2,11 @@ package com.openclassrooms.mareu.ui.meeting_list;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,20 +18,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
-import com.openclassrooms.mareu.service.ValidationService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,27 +42,17 @@ public class ListMeetingActivity extends AppCompatActivity {
     Toolbar mToolbar;
     @BindView(R.id.list_meetings)
     RecyclerView mRecyclerView;
-
-    private RadioGroup mFirstGroup;
-    private RadioGroup mSecondGroup;
-    private RadioButton mMeetingRoom1;
-    private RadioButton mMeetingRoom2;
-    private RadioButton mMeetingRoom3;
-    private RadioButton mMeetingRoom4;
-    private RadioButton mMeetingRoom5;
-    private RadioButton mMeetingRoom6;
-    private RadioButton mMeetingRoom7;
-    private RadioButton mMeetingRoom8;
-    private RadioButton mMeetingRoom9;
-    private RadioButton mMeetingRoom10;
-    private boolean isChecking = true;
-    private int mCheckedId = R.id.radioButton_room1;
+    @BindView(R.id.meeting_list_empty_text)
+    TextView emptyMeetingList;
 
     private List<Meeting> mMeetingsList = new ArrayList<>();
     private MeetingApiService mApiService = DI.getMeetingApiService();
     MyMeetingRecyclerViewAdapter adapter;
 
 
+    /**
+     * Create menu with 3 options (filter by date / filter by room name / see all)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -71,6 +60,9 @@ public class ListMeetingActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Handle item selection (filter by date / filter by room name / see all)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -89,56 +81,85 @@ public class ListMeetingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Add all meetings to list in order to see full list)
+     */
     private void resetFilter() {
         mMeetingsList.clear();
         mMeetingsList.addAll(mApiService.getMeetings());
         adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
+        showTextIfMeetingListEmpty();
     }
 
+    /**
+     * Launch a date dialog to see meetings according to selected date
+     */
     private void dateDialog() {
-        int selectedYear = 2022;
-        int selectedMonth = 04;
-        int selectedDayOfMonth = 18;
+        final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
 
         // Date Select Listener
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                Calendar cal = Calendar.getInstance();
+                Calendar cal = Calendar.getInstance(Locale.FRANCE);
                 cal.set(i, i1, i2);
                 mMeetingsList.clear();
                 mMeetingsList = mApiService.getMeetingsFilteredListByDate(cal.getTime());
                 adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
                 mRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
+                showTextIfMeetingListEmpty();
             }
         };
 
         // Create DatePickerDialog (Spinner Mode):
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                dateSetListener, selectedYear, selectedMonth, selectedDayOfMonth);
+                dateSetListener, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE));
 
         // Show
         datePickerDialog.show();
     }
 
+    /**
+     * Launch a room selection dialog to see meetings according to selected room
+     */
     private void roomDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder( ListMeetingActivity.this );
-        final View dialogView = getLayoutInflater().inflate(R.layout.room_filter_dialog, null);
-        builder.setView(dialogView);
-
         builder.setCancelable(false);
+        builder.setTitle("Choisissez une salle de réunion :");
 
-        builder.setPositiveButton("Valider", (dialog, which) -> {
-            mApiService.getMeetingsListFilteredByRoomName(getRoomValue());
+        // Set radio buttons with room names
+        String[] items = {"Peach","Mario","Luigi","Yoshi","Toad","Toadette","Bowser","Koopa","Wario", "Donkey Kong"};
+        int checkedItem = 0;
+        final String[] rooms = new String[1];
+        builder.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
+
+            // set selected room name in variable rooms and display a notification with room name
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ListMeetingActivity.this,"Salle \"" + items[which] + "\" sélectionnée",Toast.LENGTH_SHORT).show();
+                rooms[0] = items[which];
+            }
         });
 
+        // When user click on "OK", display meetings or "list is empty" according to the search result
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mMeetingsList.clear();
+                mMeetingsList = mApiService.getMeetingsListFilteredByRoomName((rooms[0].replace("[]", "")));
+                adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+                mRecyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                showTextIfMeetingListEmpty();
+            }
+        });
+
+        // Cancel button
         builder.setNegativeButton("Retour", (dialog, which) -> dialog.cancel());
 
         // Create the Alert dialog
@@ -164,64 +185,46 @@ public class ListMeetingActivity extends AppCompatActivity {
         parent.setGravity(Gravity.CENTER_HORIZONTAL);
         View leftSpacer = parent.getChildAt(1);
         leftSpacer.setVisibility(View.GONE);
-
-
-        mFirstGroup = dialogView.findViewById(R.id.radioGroup_1_to_5);
-        mSecondGroup = dialogView.findViewById(R.id.radioGroup_6_to_10);
-        mMeetingRoom1 = dialogView.findViewById(R.id.radioButton_room1);
-        mMeetingRoom2 = dialogView.findViewById(R.id.radioButton_room2);
-        mMeetingRoom3 = dialogView.findViewById(R.id.radioButton_room3);
-        mMeetingRoom4 = dialogView.findViewById(R.id.radioButton_room4);
-        mMeetingRoom5 = dialogView.findViewById(R.id.radioButton_room5);
-        mMeetingRoom6 = dialogView.findViewById(R.id.radioButton_room6);
-        mMeetingRoom7 = dialogView.findViewById(R.id.radioButton_room7);
-        mMeetingRoom8 = dialogView.findViewById(R.id.radioButton_room8);
-        mMeetingRoom9 = dialogView.findViewById(R.id.radioButton_room9);
-        mMeetingRoom10 = dialogView.findViewById(R.id.radioButton_room10);
-        ValidationService.checkIfRoomIsChecked(mFirstGroup, mSecondGroup);
-
     }
 
     /**
-     * Used to get the room name checked in the list
+     * Show "No result found" if meeting list is empty
      */
-    private String getRoomValue() {
-        int selectedRadioButtonIDinGroup1 = mFirstGroup.getCheckedRadioButtonId();
-        int selectedRadioButtonIDinGroup2 = mSecondGroup.getCheckedRadioButtonId();
-
-        // If nothing is selected from Radio Group, then it return -1
-        if (selectedRadioButtonIDinGroup1 != -1) {
-            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup1);
-            String selectedRadioButtonText1 = selectedRadioButton.getText().toString();
-            return selectedRadioButtonText1;
-        } else { // it means that button is checked in Group 2
-            RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup2);
-            String selectedRadioButtonText2 = selectedRadioButton.getText().toString();
-            return selectedRadioButtonText2;
+    private void showTextIfMeetingListEmpty() {
+        if (mMeetingsList.size() == 0) {
+            emptyMeetingList.setVisibility(View.VISIBLE);
+        } else {
+            emptyMeetingList.setVisibility(View.GONE);
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_meeting);
         ButterKnife.bind(this);
-
         setSupportActionBar(mToolbar);
         mMeetingsList.addAll(mApiService.getMeetings());
         adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
-
-
-
-
     }
 
+    /**
+     * Launch add meeting activity & close current
+     */
     @OnClick(R.id.add_meeting)
     void addMeeting() {
         AddMeetingActivity.navigate(this);
+        finish();
+    }
+
+    /**
+     * Used to navigate to this activity
+     * @param activity
+     */
+    public static void navigate(FragmentActivity activity) {
+        Intent intent = new Intent(activity, ListMeetingActivity.class);
+        ActivityCompat.startActivity(activity, intent, null);
     }
 }

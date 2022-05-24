@@ -42,14 +42,15 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mApiService = DI.getMeetingApiService();
 
         setMeetingData();
-
-        // Listener on Update Button to launch alert box & confirm update
-        mEditButton.setOnClickListener(view -> createCustomDialogBox(" Voulez vous vraiment modifier cette réunion ?"));
     }
 
+    /**
+     * Close form and go to list of meetings if back button is clicked
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            ListMeetingActivity.navigate(this);
             finish();
             return true;
         }
@@ -73,6 +74,9 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         return meeting;
     }
 
+    /**
+     * Get all details page views
+     */
     public void getViews() {
         mMeetingColor = findViewById(R.id.meeting_detail_avatar);
         mMeetingSubtitle = findViewById(R.id.meeting_detail_second_title);
@@ -82,6 +86,9 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingDescription = findViewById(R.id.meeting_detail_description);
     }
 
+    /**
+     * Set background image
+     */
     public void setMeetingBackground() {
         Glide.with(mMeetingColor.getContext())
             .load(R.mipmap.ic_mario_foreground)
@@ -89,6 +96,9 @@ public class MeetingDetailsActivity extends AppCompatActivity {
             .into(mMeetingColor);
     }
 
+    /**
+     * Set meeting data in the right fields
+     */
     public void setMeetingInfo(Meeting meeting) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
         mMeetingSubtitle.setText(meeting.getSubject());
@@ -98,12 +108,17 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingDescription.setText(meeting.getDescription());
     }
 
+    /**
+     * Get edit button view & set listener to launch confirmation alert dialog
+     */
     public void setEditButton() {
         mEditButton = findViewById(R.id.meeting_detail_update_button);
+        mEditButton.setOnClickListener(view -> createCustomDialogBox(" Voulez vous vraiment modifier cette réunion ?"));
     }
 
     /**
-     * Displays an alert dialog box for best user XP ;)
+     * Displays an alert dialog box for best user XP (user when edit button is pressed))
+     * Launch update activity when "OK" is pressed
      */
     public void createCustomDialogBox(String message) {
         // Build an alert dialogBox
@@ -151,5 +166,4 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         assert messageText != null;
         messageText.setGravity(Gravity.CENTER);
     }
-
 }

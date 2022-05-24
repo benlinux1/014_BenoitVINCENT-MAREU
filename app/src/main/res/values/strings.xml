@@ -23,4 +23,6 @@
     <string name="menu_filter_room">Filtrer par salle</string>
     <string name="menu_filter_reset">Voir toutes les réunions</string>
 
+    <string name="empty_list">Aucune réunion planifiée ne correspond à votre sélection</string>
+
 </resources>

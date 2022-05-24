@@ -1,5 +1,6 @@
 package com.openclassrooms.mareu.service;
 
+import android.app.Activity;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputLayout;
 
@@ -16,6 +17,9 @@ import com.openclassrooms.mareu.model.Meeting;
 
 public class ValidationService {
 
+    /**
+     * validate text field with regex & set input layout error
+     */
     public static boolean validateTextInput(String subject, TextInputLayout subjectError) {
         String subjectRegex = "^[a-zA-Z0-9éèàêîïôö ]*$";
         if (subject.matches(subjectRegex) && (subject.trim().length() > 2))  {
@@ -27,6 +31,9 @@ public class ValidationService {
         }
     }
 
+    /**
+     * validate email field with regex & set input layout error
+     */
     public static boolean validateEmail(String email, TextInputLayout inputError) {
         String emailRegex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         if (email.matches(emailRegex) && (email.trim().length() > 5))  {
@@ -38,6 +45,9 @@ public class ValidationService {
         }
     }
 
+    /**
+     * Set error in layout fields when inpu is empty
+     */
     public static boolean validateAllFields(TextInputLayout subjectLayout, RecyclerView participantsList, TextInputLayout participantsLayout, TextInputLayout descriptionInput) {
         if (subjectLayout.getEditText().getText().toString().equals("")) {
             subjectLayout.setError("Merci de compléter ce champ");
@@ -54,7 +64,7 @@ public class ValidationService {
     }
 
     /**
-     * Subject Text changed listener to validate field & set enabled/disabled the creation button
+     * Text changed listener to validate field & set enabled/disabled the creation button
      */
     public static void textInputValidation(EditText textInput, TextInputLayout textInputLayout, MaterialButton actionButton) {
         textInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
