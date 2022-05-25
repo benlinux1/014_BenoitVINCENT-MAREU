@@ -347,7 +347,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                         meetingDetailsActivityIntent.putExtra("MEETING_ID", mMeetingId);
                         UpdateMeetingActivity.this.startActivity(meetingDetailsActivityIntent);
                     } else { // Notify user if room isn't free at the selected date
-                        Toast.makeText(UpdateMeetingActivity.this, "La salle " + getRoomValue() + " sera déjà occupée à la date sélectionnée", Toast.LENGTH_LONG).show();
+                        Toast.makeText(UpdateMeetingActivity.this, "La salle " + getRoomValue() + " est occupée à cette date", Toast.LENGTH_LONG).show();
                     }
                     break;
                 }

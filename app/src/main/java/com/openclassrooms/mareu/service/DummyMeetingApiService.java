@@ -92,19 +92,6 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     /**
-     * Set / unset neighbour in / from favorites list
-     * {@param meeting}
-     */
-    @Override
-    public void toggleFree(Meeting meeting) {
-        if (meeting.isFree()) {
-            meeting.setFree(false);
-        } else {
-            meeting.setFree(true);
-        }
-    }
-
-    /**
      * Check if room is free according to roomName & meeting date (meeting max duration 1 hour & 59 minutes)
      * @param date
      * @param roomName

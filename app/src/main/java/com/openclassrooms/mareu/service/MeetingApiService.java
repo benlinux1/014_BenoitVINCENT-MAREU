@@ -49,12 +49,6 @@ public interface MeetingApiService {
     List<Meeting> getMeetingsListFilteredByRoomName(String roomName);
 
     /**
-     * Set / unset neighbour in / from favorites list
-     * @param meeting
-     */
-    void toggleFree(Meeting meeting);
-
-    /**
      * Check if room is free according to roomName & meeting date (exception added to update meeting)
      * @param date
      * @param roomName
