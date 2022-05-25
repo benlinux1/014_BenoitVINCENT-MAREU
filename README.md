@@ -1,12 +1,12 @@
-![da-android-entrevoisins](https://user-images.githubusercontent.com/78255467/163183018-566703a3-5664-4a5d-98d9-cf74f8c226cd.svg)
-![#p3-openclassrooms](https://user-images.githubusercontent.com/78255467/163183381-1d65bd4d-8feb-45cf-bd53-95e4e82921d5.svg)
+![da-android-maréu](https://user-images.githubusercontent.com/78255467/170267450-878dcfea-f86c-4ae3-a39e-5262c7a67adf.svg)
+![#p4-openclassrooms](https://user-images.githubusercontent.com/78255467/170267466-ecf67e3a-7de5-4cdc-9ce8-05a5c721c728.svg)
 
 # VERSION FRANCAISE
 (English translation in the 2nd part of the documentation below)
 
-# Entrevoisins
+# MaRéu
 
-Ce dépôt contient une mini-application pour le P3 du parcours **DA ANDROID**, intitulée Entrevoisins.
+Ce dépôt contient une mini-application pour le P4 du parcours **DA ANDROID**, intitulée **MaRéu**.
 
 ## Technologies
 - 100% JAVA, ce projet a été réalisé à partir de l'IDE Android Studio.
@@ -14,11 +14,11 @@ Ce dépôt contient une mini-application pour le P3 du parcours **DA ANDROID**, 
 ## Installation
 - Ouvrez votre IDE préféré (ici Android Studio)
 - Ouvrez un nouveau projet et choississez "Get From Version Control"
-- Clonez l'application en copiant / collant ce lien : https://github.com/benlinux1/DA_ANDROID_ENTREVOISINS.git
+- Clonez l'application en copiant / collant ce lien : https://github.com/benlinux1/DA_ANDROID_MAREU.git
 - Spécifiez un dossier de destination sur votre ordinateur et cliquez sur "clone"
 - Voici les étapes en images :
 
-![Sans titre-1](https://user-images.githubusercontent.com/78255467/163190059-da88648f-1973-478d-bb77-b718449825a3.png)
+![Sans titre-1](https://user-images.githubusercontent.com/78255467/170271043-21297926-a109-4c5f-bebb-09849548bfe7.png)
 
 L'application va ensuite se compiler dans Android Studio
 
@@ -36,19 +36,18 @@ Ensuite, lancez l'application en cliquant sur le bouton triangulaire "Run", comm
 
 Cette applcation vous permet de/d' :
 
-- Afficher les voisins de l'application
-- Consulter le profil de chaque voisin en cliquant sur leur nom ou avatar
-- Ajouter un voisin parmi vos favoris
-- Consulter votre liste de favoris
-- Retirer un voisin de votre liste de favoris
-- Ajouter un nouveau voisin
-- Supprimer un voisin de la liste générale
+- Afficher la liste des réunions planifiées au sein de l'entreprise
+- Consulter les détails de chaque réunion (Sujet, heure, salle, description, participants) en cliquant un élément dans la liste
+- Ajouter une nouvelle réunion, après avoir renseigné tous les champs du formulaire.
+- Modifier la réunion de son choix
+- Supprimer une réunion de la liste générale
+- Filtrer les réunions dans la liste générale, par date, ou selon la salle sélectionnée.
 
-![Fonctionnalités](https://user-images.githubusercontent.com/78255467/163198277-585066ca-6ddb-4857-95c3-bb0dba4fb3bb.png)
+![Fonctionnalités FR](https://user-images.githubusercontent.com/78255467/170277591-a668bcb3-74d9-4531-94c0-267d8e36e8e7.png)
 
 ## Contribuez au projet
 
-Entrevoisins est un projet open source. Vous pouvez donc en utiliser le code source à votre guise pour développer vos propres focntionnalités.
+Entrevoisins est un projet open source. Vous pouvez donc en utiliser le code source à votre guise pour développer vos propres fonctionnalités.
 
 ## Auteurs
 
@@ -57,15 +56,15 @@ Notre équipe : BenLinux & FranckBlack
 
 ============================================================================================
 
-![da-android-entrevoisins](https://user-images.githubusercontent.com/78255467/163183018-566703a3-5664-4a5d-98d9-cf74f8c226cd.svg)
-![#p3-openclassrooms](https://user-images.githubusercontent.com/78255467/163183381-1d65bd4d-8feb-45cf-bd53-95e4e82921d5.svg)
+![da-android-maréu](https://user-images.githubusercontent.com/78255467/170271248-7bdd2842-0cda-49c6-b7db-439d372d3ee0.svg)
+![#p4-openclassrooms](https://user-images.githubusercontent.com/78255467/170271275-7d88b19f-a1f9-43a6-9445-bfd863aae503.svg)
 
 # ENGLISH VERSION
 (version française en 1ère partie de la documentation)
 
 # Entrevoisins
 
-This repository contains a mini app for the **DA Android** 3rd projet, untiltled **Entrevoisins**
+This repository contains a mini app for the **DA Android** 4th projet, untitled **MaRéu**
 
 ## Technologies
 - 100% JAVA, this project was made with Android Studio IDE.
@@ -73,11 +72,11 @@ This repository contains a mini app for the **DA Android** 3rd projet, untiltled
 ## Install
 - Open your favorite IDE (here Android Studio)
 - Open a new project and choose "Get From Version Control" option
-- Clone the app by copying / pasting this repository link : https://github.com/benlinux1/DA_ANDROID_ENTREVOISINS.git
+- Clone the app by copying / pasting this repository link : https://github.com/benlinux1/DA_ANDROID_MAREU.git
 - Specify a destination folder name on your computer and click "clone"
 - Here are the steps to illustrate in pictures :
 
-![Sans titre-1](https://user-images.githubusercontent.com/78255467/163190059-da88648f-1973-478d-bb77-b718449825a3.png)
+![Sans titre-1](https://user-images.githubusercontent.com/78255467/170271169-7485e9fd-6986-4aca-82a2-237066fd9940.png)
 
 Next the app will compile in Android Studio
 
@@ -103,7 +102,7 @@ This app allow you to :
 - Add a new meeting
 - Remove a meeting from global list
 
-![Fonctionnalités gb](https://user-images.githubusercontent.com/78255467/163202157-25bf037d-efa5-457f-9e59-2d00a503261c.png)
+![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/170277679-27b594b3-14e9-4507-9609-08f1dfa39dcc.png)
 
 ## Contribute to the project
 
