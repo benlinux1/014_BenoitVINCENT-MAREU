@@ -1,5 +1,5 @@
-![da-android-entrevoisins](https://user-images.githubusercontent.com/78255467/163183018-566703a3-5664-4a5d-98d9-cf74f8c226cd.svg)
-![#p3-openclassrooms](https://user-images.githubusercontent.com/78255467/163183381-1d65bd4d-8feb-45cf-bd53-95e4e82921d5.svg)
+![da-android-maréu](https://user-images.githubusercontent.com/78255467/170267450-878dcfea-f86c-4ae3-a39e-5262c7a67adf.svg)
+![#p4-openclassrooms](https://user-images.githubusercontent.com/78255467/170267466-ecf67e3a-7de5-4cdc-9ce8-05a5c721c728.svg)
 
 # VERSION FRANCAISE
 (English translation in the 2nd part of the documentation below)
