@@ -4,9 +4,9 @@
 # VERSION FRANCAISE
 (English translation in the 2nd part of the documentation below)
 
-# Entrevoisins
+# MaRéu
 
-Ce dépôt contient une mini-application pour le P3 du parcours **DA ANDROID**, intitulée Entrevoisins.
+Ce dépôt contient une mini-application pour le P4 du parcours **DA ANDROID**, intitulée MaRéu.
 
 ## Technologies
 - 100% JAVA, ce projet a été réalisé à partir de l'IDE Android Studio.
@@ -14,7 +14,7 @@ Ce dépôt contient une mini-application pour le P3 du parcours **DA ANDROID**, 
 ## Installation
 - Ouvrez votre IDE préféré (ici Android Studio)
 - Ouvrez un nouveau projet et choississez "Get From Version Control"
-- Clonez l'application en copiant / collant ce lien : https://github.com/benlinux1/DA_ANDROID_ENTREVOISINS.git
+- Clonez l'application en copiant / collant ce lien : https://github.com/benlinux1/DA_ANDROID_MAREU.git
 - Spécifiez un dossier de destination sur votre ordinateur et cliquez sur "clone"
 - Voici les étapes en images :
 
