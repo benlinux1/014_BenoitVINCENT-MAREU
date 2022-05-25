@@ -18,7 +18,7 @@ Ce dépôt contient une mini-application pour le P4 du parcours **DA ANDROID**, 
 - Spécifiez un dossier de destination sur votre ordinateur et cliquez sur "clone"
 - Voici les étapes en images :
 
-![Sans titre-1](https://user-images.githubusercontent.com/78255467/163190059-da88648f-1973-478d-bb77-b718449825a3.png)
+![Sans titre-1](https://user-images.githubusercontent.com/78255467/170271043-21297926-a109-4c5f-bebb-09849548bfe7.png)
 
 L'application va ensuite se compiler dans Android Studio
 
