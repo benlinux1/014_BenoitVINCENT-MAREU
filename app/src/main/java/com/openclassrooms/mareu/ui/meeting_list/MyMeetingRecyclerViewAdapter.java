@@ -15,9 +15,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.mareu.R;
+import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.events.DeleteMeetingEvent;
 import com.openclassrooms.mareu.model.Meeting;
+import com.openclassrooms.mareu.service.MeetingApiService;
+
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -28,6 +32,7 @@ import butterknife.ButterKnife;
 public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
 
     private List<Meeting> mMeetings;
+    private MeetingApiService mApiService;
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
@@ -56,8 +61,10 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
             @Override
             public void onClick(View v) {
                 // Delete meeting from global List
-                EventBus.getDefault().post(new DeleteMeetingEvent(meeting));
+                mApiService = DI.getMeetingApiService();
+                mApiService.deleteMeeting(meeting);
                 Toast.makeText(v.getContext(), "La réunion intitulée \"" + meeting.getSubject() + "\" a bien été supprimée", Toast.LENGTH_LONG).show();
+                initList();
             }
         });
 
@@ -70,6 +77,11 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
                 meetingItem.getContext().startActivity(meetingDetailActivityIntent);
             }
         });
+    }
+
+    private void initList() {
+        mMeetings = mApiService.getMeetings();
+        notifyDataSetChanged();
     }
 
     @Override

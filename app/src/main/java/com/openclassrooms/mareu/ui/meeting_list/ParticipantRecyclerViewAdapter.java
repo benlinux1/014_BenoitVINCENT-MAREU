@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.model.Participant;
+import com.openclassrooms.mareu.service.MeetingApiService;
 
 import java.util.ArrayList;
 

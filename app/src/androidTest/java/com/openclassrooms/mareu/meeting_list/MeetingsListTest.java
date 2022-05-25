@@ -1,5 +1,5 @@
 
-package com.openclassrooms.mareu.neighbour_list;
+package com.openclassrooms.mareu.meeting_list;
 
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -35,11 +35,10 @@ import static org.hamcrest.core.IsNull.notNullValue;
  * Test class for list of neighbours
  */
 @RunWith(AndroidJUnit4.class)
-public class NeighboursListTest {
+public class MeetingsListTest {
 
     // This is fixed
-    private static int ITEMS_COUNT = 12;
-    private static int FAVORITES_ITEMS_COUNT = 0;
+    private static int ITEMS_COUNT = 7;
 
     private ListMeetingActivity mActivity;
 
@@ -67,21 +66,21 @@ public class NeighboursListTest {
      * When we delete an item, the item is no more shown
      */
     @Test
-    public void myNeighboursList_deleteNeighbourAction_shouldRemoveItem() {
-        // Check neighbours list count (actual is 12)
+    public void myMeetingsList_deleteMeetingAction_shouldRemoveItem() {
+        // Check neighbours list count (actual is 7)
         onView(ViewMatchers.withId(R.id.list_meetings)).check(withItemCount(ITEMS_COUNT));
         // When perform a click on a delete icon
         onView(ViewMatchers.withId(R.id.list_meetings))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
-        // Then : check if item was deleted in the list (new is 11)
+        // Then : check if item was deleted in the list (new is 6)
         onView(ViewMatchers.withId(R.id.list_meetings)).check(withItemCount(ITEMS_COUNT-1));
     }
 
     /**
-     * When we click on a neighbour in the list, the neighbour's profile is opened
+     * When we click on a meeting in the list, the meeting's detailed page is opened
      */
     @Test
-    public void myNeighboursList_clickOnClickNeighbourAction_shouldOpenNeighbourProfile() {
+    public void myMeetingsList_clickOnClickMeetingAction_shouldOpenMeetingDetails() {
         // Click on the third item in the neighbour list
         onView(withId(R.id.list_meetings))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
@@ -90,7 +89,7 @@ public class NeighboursListTest {
     }
 
     /**
-     * When we click on a neighbour in the list, the neighbour's data is displayed in profile's page
+     * When we click on a meeting in the list, the meeting's data is displayed in the right fields
      */
     @Test
     public void myMeetingList_clickOnMeeting_shouldDisplayMeetingDataInDetailView() {
@@ -99,10 +98,8 @@ public class NeighboursListTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(4, click()));
         // Check if meeting data is displayed on his profile's page
         Meeting meetingPosition = DI.getMeetingApiService().getMeetings().get(4);
-        onView(withId(R.id.meeting_detail_location_room)).check(matches(withText(meetingPosition.getRoomName())));
+        onView(withId(R.id.meeting_detail_location_room)).check(matches(withText("Salle \"" + meetingPosition.getRoomName() +"\"")));
         onView(withId(R.id.meeting_detail_second_title)).check(matches(withText(meetingPosition.getSubject())));
+        onView(withId(R.id.meeting_detail_description)).check(matches(withText(meetingPosition.getDescription())));
     }
-
-
-
 }
