@@ -54,4 +54,13 @@ public interface MeetingApiService {
      */
     void toggleFree(Meeting meeting);
 
+    /**
+     * Check if room is free according to roomName & meeting date (exception added to update meeting)
+     * @param date
+     * @param roomName
+     * @param exception
+     * @return {@link boolean}
+     */
+    boolean checkIfRoomIsFree(Date date, String roomName, Long exception);
+
 }

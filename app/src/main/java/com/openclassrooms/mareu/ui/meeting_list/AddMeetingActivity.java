@@ -265,10 +265,15 @@ public class AddMeetingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(subjectLayout, participantsList, participantsLayout, descriptionInputLayout)) {
-            mApiService.createMeeting(meeting);
-            Toast.makeText(AddMeetingActivity.this, "Réunion créée avec succès", Toast.LENGTH_LONG).show();
-            finish();
-            ListMeetingActivity.navigate(this);
+            assert meeting != null;
+            if (mApiService.checkIfRoomIsFree(meeting.getDate(), meeting.getRoomName(), null)) {
+                mApiService.createMeeting(meeting);
+                Toast.makeText(AddMeetingActivity.this, "Réunion créée avec succès", Toast.LENGTH_LONG).show();
+                finish();
+                ListMeetingActivity.navigate(this);
+            } else {
+                Toast.makeText(AddMeetingActivity.this, "La salle " + meeting.getRoomName() + " sera déjà occupée à la date sélectionnée", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

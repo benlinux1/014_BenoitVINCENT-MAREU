@@ -2,8 +2,6 @@ package com.openclassrooms.mareu.service;
 
 import com.openclassrooms.mareu.model.Meeting;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,6 +79,7 @@ public class DummyMeetingApiService implements MeetingApiService {
 
     /**
      * Get the meeting list according to selected Room Filter
+     * @param roomName
      */
     @Override
     public List<Meeting> getMeetingsListFilteredByRoomName(String roomName) {
@@ -103,5 +102,37 @@ public class DummyMeetingApiService implements MeetingApiService {
         } else {
             meeting.setFree(true);
         }
+    }
+
+    /**
+     * Check if room is free according to roomName & meeting date (meeting max duration 1 hour & 59 minutes)
+     * @param date
+     * @param roomName
+     * @param exceptionId
+     * @return boolean
+     */
+    public boolean checkIfRoomIsFree(Date date, String roomName, Long exceptionId) {
+        Calendar selectedDate = Calendar.getInstance();
+        selectedDate.setTime(date);
+        // loop in meetings
+        for (int i = 0; i < meetings.size(); i++) {
+            // Get meeting date with Calendar
+            Calendar meetingDate = Calendar.getInstance();
+            meetingDate.setTime(meetings.get(i).getDate());
+            // Set meeting max duration (1 hour & 59 minutes)
+            int durationHour = meetingDate.get(Calendar.HOUR_OF_DAY)+1;
+            int durationMinute = meetingDate.get(Calendar.MINUTE)+59;
+            // Set same time conditions to compare selected dateTime and all meetings dateTime
+            boolean sameTime = selectedDate.get(Calendar.DAY_OF_YEAR) == meetingDate.get(Calendar.DAY_OF_YEAR) &&
+                selectedDate.get(Calendar.YEAR) == meetingDate.get(Calendar.YEAR) &&
+                (selectedDate.get(Calendar.HOUR_OF_DAY) >= meetingDate.get(Calendar.HOUR_OF_DAY)
+                        && (selectedDate.get(Calendar.HOUR_OF_DAY) <= durationHour && selectedDate.get(Calendar.MINUTE) <= durationMinute));
+            boolean sameRoom = meetings.get(i).getRoomName().equals(roomName);
+            boolean differentId = meetings.get(i).getId() != exceptionId;
+            if (sameRoom && sameTime && differentId) {
+                return false;
+            }
+        }
+        return true;
     }
 }

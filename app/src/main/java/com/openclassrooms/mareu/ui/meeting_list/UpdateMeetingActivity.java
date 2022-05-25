@@ -74,8 +74,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         setMeetingInfo(meeting);
         initParticipantsRecyclerView();
         showParticipantsList();
-        setMeetingRoomChecked(meeting);
         ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
+        setMeetingRoomChecked(meeting);
         ValidationService.textInputValidation(mMeetingSubject, mMeetingSubjectLayout, mUpdateButton);
         ValidationService.textInputValidation(mMeetingDescription, mMeetingDescriptionLayout, mUpdateButton);
         checkIfEmailIsValid(mParticipantsLayout, mParticipantInput, mUpdateButton);
@@ -146,12 +146,13 @@ public class UpdateMeetingActivity extends AppCompatActivity {
      * Pre complete fields with meeting informations
      */
     private void setMeetingInfo(Meeting meeting) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
         mMeetingColor.setColorFilter(Color.parseColor(meeting.getAvatarColor()));
         mMeetingSubject.setText(meeting.getSubject());
         mMeetingDate.setText(dateFormat.format(meeting.getDate()));
         mMeetingDescription.setText(meeting.getDescription());
         mUpdateButton.setText("MODIFIER");
+        mUpdateButton.setEnabled(true);
         setParticipants(meeting);
     }
 
@@ -163,7 +164,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
             if (hasFocus) {
                 DateTimeService.setDate(mMeetingDate, UpdateMeetingActivity.this);
             }
-            mUpdateButton.setEnabled(true);
         });
     }
 
@@ -203,7 +203,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mailInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                actionButton.setEnabled(false);
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -215,7 +214,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                         if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
                             Participant participant = new Participant(s.toString());
                             addParticipant(participant);
-                            actionButton.setEnabled(true);
                         }
                         return false;
                     }
@@ -286,7 +284,6 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private String getRoomValue() {
         int selectedRadioButtonIDinGroup1 = mFirstGroup.getCheckedRadioButtonId();
         int selectedRadioButtonIDinGroup2 = mSecondGroup.getCheckedRadioButtonId();
-
         // If nothing is selected from Radio Group, then it return -1
         if (selectedRadioButtonIDinGroup1 != -1) {
             RadioButton selectedRadioButton = findViewById(selectedRadioButtonIDinGroup1);
@@ -316,7 +313,11 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         mUpdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateMeeting();
+                try {
+                    updateMeeting();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -324,31 +325,33 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     /**
      * Send form values to model in order to update meeting after fields validation. Then close activity.
      */
-    void updateMeeting() {
-        MeetingApiService mApiService = DI.getMeetingApiService();
-        mMeetingId = getMeetingInfo().getId();
-        for (Meeting meeting : mApiService.getMeetings()) {
-            if (meeting.getId() == mMeetingId) {
-                try {
-                    meeting.setDate(DateTimeService.getDate(mMeetingDateLayout.getEditText().getText().toString()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+    void updateMeeting() throws ParseException {
+        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
+            mMeetingId = getMeetingInfo().getId();
+            mApiService = DI.getMeetingApiService();
+            // loop in meetings list
+            for (Meeting meeting :  mApiService.getMeetings()) {
+                // when meeting is found
+                if (meeting.getId() == mMeetingId) {
+                    // check if room is free at the selected date & replace meeting data
+                    if (mApiService.checkIfRoomIsFree(DateTimeService.getDate(mMeetingDateLayout.getEditText().getText().toString()), getRoomValue(), mMeetingId)) {
+                        meeting.setDate(DateTimeService.getDate(mMeetingDateLayout.getEditText().getText().toString()));
+                        meeting.setSubject(mMeetingSubjectLayout.getEditText().getText().toString());
+                        meeting.setRoomName(getRoomValue());
+                        meeting.setParticipants(getEmailList());
+                        meeting.setDescription(mMeetingDescriptionLayout.getEditText().getText().toString());
+                        // Then close activity, notify user with success toast & back to meeting details page
+                        finish();
+                        Toast.makeText(UpdateMeetingActivity.this, "Vos modifications ont bien été enregistrées", Toast.LENGTH_LONG).show();
+                        Intent meetingDetailsActivityIntent = new Intent(UpdateMeetingActivity.this, MeetingDetailsActivity.class);
+                        meetingDetailsActivityIntent.putExtra("MEETING_ID", mMeetingId);
+                        UpdateMeetingActivity.this.startActivity(meetingDetailsActivityIntent);
+                    } else { // Notify user if room isn't free at the selected date
+                        Toast.makeText(UpdateMeetingActivity.this, "La salle " + getRoomValue() + " sera déjà occupée à la date sélectionnée", Toast.LENGTH_LONG).show();
+                    }
+                    break;
                 }
-                meeting.setSubject(mMeetingSubjectLayout.getEditText().getText().toString());
-                meeting.setRoomName(getRoomValue());
-                meeting.setParticipants(getEmailList());
-                meeting.setDescription(mMeetingDescriptionLayout.getEditText().getText().toString());
-                break;
             }
         }
-        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
-            Meeting meeting = getMeetingInfo();
-            finish();
-            Toast.makeText(UpdateMeetingActivity.this, "Vos modifications ont bien été enregistrées", Toast.LENGTH_LONG).show();
-            Intent meetingDetailsActivityIntent = new Intent(UpdateMeetingActivity.this, MeetingDetailsActivity.class);
-            meetingDetailsActivityIntent.putExtra("MEETING_ID", meeting.getId());
-            UpdateMeetingActivity.this.startActivity(meetingDetailsActivityIntent);
-        }
-
     }
 }
