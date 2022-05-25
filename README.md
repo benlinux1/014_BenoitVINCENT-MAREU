@@ -45,6 +45,16 @@ Cette applcation vous permet de/d' :
 
 ![Fonctionnalités FR](https://user-images.githubusercontent.com/78255467/170277591-a668bcb3-74d9-4531-94c0-267d8e36e8e7.png)
 
+## Tests
+
+L'application a été testée par émulation sur les appareils suivants :
+- Pixel 3XL (API 30)
+- Pixel 5 (API 30)
+- Nexus 6 (API 30)
+- Nexus S (API 30)
+
+Elle a également été testée dans des conditions réelles, sur un smartphone physique Samsung Galaxy S20.
+
 ## Contribuez au projet
 
 Entrevoisins est un projet open source. Vous pouvez donc en utiliser le code source à votre guise pour développer vos propres fonctionnalités.
@@ -103,6 +113,16 @@ This app allow you to :
 - Remove a meeting from global list
 
 ![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/170277679-27b594b3-14e9-4507-9609-08f1dfa39dcc.png)
+
+## Tests
+
+This app has been tested on following devices :
+- Pixel 3XL (API 30)
+- Pixel 5 (API 30)
+- Nexus 6 (API 30)
+- Nexus S (API 30)
+
+It was also tested in real conditions, on a physical device Samsung Galaxy S20.
 
 ## Contribute to the project
 
