@@ -29,9 +29,6 @@ public class Meeting {
     /** Subject description */
     private String description;
 
-    /** Free room */
-    private Boolean isFree;
-
     /**
      * Constructor
      * @param id
@@ -109,14 +106,6 @@ public class Meeting {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public boolean isFree() {
-        return isFree;
-    }
-
-    public void setFree(boolean free) {
-        this.isFree = free;
     }
 
     @Override
