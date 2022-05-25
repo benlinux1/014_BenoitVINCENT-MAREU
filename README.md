@@ -64,7 +64,7 @@ Notre équipe : BenLinux & FranckBlack
 
 # Entrevoisins
 
-This repository contains a mini app for the **DA Android** 4th projet, untiltled **MaRéu**
+This repository contains a mini app for the **DA Android** 4th projet, untitled **MaRéu**
 
 ## Technologies
 - 100% JAVA, this project was made with Android Studio IDE.
