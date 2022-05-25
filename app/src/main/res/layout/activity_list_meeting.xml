@@ -40,8 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             app:layoutManager="LinearLayoutManager"
             tools:context=".ui.meeting_list.MeetingFragment"
             app:layout_constraintTop_toBottomOf="@id/appbar"
@@ -71,6 +71,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:foregroundTint="#FFFFFF"
         app:backgroundTint="@color/colorRed"
-        app:srcCompat="@drawable/ic_baseline_add_24" />
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        android:contentDescription="@string/add_meeting" />
 
 </android.support.design.widget.CoordinatorLayout>

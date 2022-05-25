@@ -74,6 +74,7 @@
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../../.." />
     <option name="OPTION_SCOPE" value="public" />
+    <option name="OPEN_IN_BROWSER" value="false" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="androidx.annotation.Nullable" />

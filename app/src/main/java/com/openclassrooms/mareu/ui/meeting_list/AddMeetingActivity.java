@@ -266,7 +266,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         }
         if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(subjectLayout, participantsList, participantsLayout, descriptionInputLayout)) {
             assert meeting != null;
-            if (mApiService.checkIfRoomIsFree(meeting.getDate(), meeting.getRoomName(), null)) {
+            if (mApiService.checkIfRoomIsFree(meeting.getDate(), meeting.getRoomName(), System.currentTimeMillis())) {
                 mApiService.createMeeting(meeting);
                 Toast.makeText(AddMeetingActivity.this, "Réunion créée avec succès", Toast.LENGTH_LONG).show();
                 finish();
