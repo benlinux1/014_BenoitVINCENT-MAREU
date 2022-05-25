@@ -47,7 +47,7 @@ Cette applcation vous permet de/d' :
 
 ## Contribuez au projet
 
-Entrevoisins est un projet open source. Vous pouvez donc en utiliser le code source à votre guise pour développer vos propres focntionnalités.
+Entrevoisins est un projet open source. Vous pouvez donc en utiliser le code source à votre guise pour développer vos propres fonctionnalités.
 
 ## Auteurs
 
