@@ -13,9 +13,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.meeting_list.UpdateMeetingActivity"
+            android:label="@string/activity_update_meeting"
             android:exported="false" />
         <activity
             android:name=".ui.meeting_list.MeetingDetailsActivity"
+            android:label="@string/activity_detail_meeting"
             android:exported="false" />
         <activity
             android:name=".ui.meeting_list.AddMeetingActivity"

@@ -3,6 +3,8 @@
     <string name="tab_neighbour_title">Salles occupées</string>
     <string name="tab_favorites_title">Salles libres</string>
     <string name="activity_new_meeting">Nouvelle réunion</string>
+    <string name="activity_update_meeting">Modification de la réunion</string>
+    <string name="activity_detail_meeting">Votre réunion en détails</string>
 
     <string name="meeting_color">Couleur du meeting :</string>
     <string name="meeting_main_title">ROOM</string>
