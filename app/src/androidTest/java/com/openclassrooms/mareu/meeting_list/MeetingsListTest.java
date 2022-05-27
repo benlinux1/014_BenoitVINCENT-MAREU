@@ -124,13 +124,21 @@ public class MeetingsListTest {
      */
     @Test
     public void myMeetingsList_editMeetingAction_shouldOpenEditMeetingForm() {
-        // Check meetings list count (actual is 7)
-        onView(ViewMatchers.withId(R.id.meeting_page));
-        // When perform a click on the add button
+        // Click on the fifth item in the meetings list
+        onView(withId(R.id.list_meetings))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(4, click()));
+        // Check if meeting details page is displayed
+        onView(withId(R.id.meeting_page)).check(matches(isDisplayed()));
+        // When perform a click on the update button
         onView(withId(R.id.meeting_detail_update_button)).perform(click());
-
-        // Check if meeting form is displayed
+        // Check if alert dialog is displayed
+        onView(withText("Voulez vous vraiment modifier cette réunion ?")).check(matches(isDisplayed()));
+        // When we click "OK" confirmation button
+        onView(withId(android.R.id.button1)).perform(click());
+        // Check if update meeting form is displayed
         onView(withId(R.id.meeting_fields_page)).check(matches(isDisplayed()));
+        // Check if meeting data (here subject) is displayed in the right field
+        Meeting meetingPosition = DI.getMeetingApiService().getMeetings().get(4);
+        onView(withId(R.id.add_subject_input)).check(matches(withText(meetingPosition.getSubject())));
     }
-
 }

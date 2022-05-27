@@ -113,7 +113,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
      */
     public void setEditButton() {
         mEditButton = findViewById(R.id.meeting_detail_update_button);
-        mEditButton.setOnClickListener(view -> createCustomDialogBox(" Voulez vous vraiment modifier cette réunion ?"));
+        mEditButton.setOnClickListener(view -> createCustomDialogBox("Voulez vous vraiment modifier cette réunion ?"));
     }
 
     /**
