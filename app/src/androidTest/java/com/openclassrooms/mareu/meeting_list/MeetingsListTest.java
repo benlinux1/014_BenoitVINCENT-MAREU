@@ -1,6 +1,8 @@
 
 package com.openclassrooms.mareu.meeting_list;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
@@ -8,6 +10,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -25,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -155,7 +159,7 @@ public class MeetingsListTest {
 
     /**
      * When we add a meeting, the item is in the meetings list
-     * DONT' RUN this test alone (fails because includes item count with item deleted before)
+     * DONT' RUN this test alone (it fails because it includes modified item count, given item deleted before)
      */
     @Test
     public void myMeetingsList_addingNewMeetingAction_shouldAddItem() {
@@ -205,10 +209,38 @@ public class MeetingsListTest {
 
     /**
      * When we add a meeting, the item is in the meetings list
+     */
+    @Test
+    public void myMeetingsList_filteringByDateMeetingAction_shouldUpdateItem() {
+        // Check meetings list count
+        onView(withId(R.id.list_meetings)).check(withItemCount(ITEMS_COUNT));
+        // When we click on menu option
+        try {
+            onView(withId(R.id.filter_date)).perform(click());
+        } catch (NoMatchingViewException e) {
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+            onView(withText(R.string.menu_filter_date)).perform(click());
+        }
+        // Set filtering date (day / month / year)
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022,  5, 19));
+        // Click OK button
+        onView(withId(android.R.id.button1)).perform(click());
+        // Check if meeting details page is displayed
+        onView(withId(R.id.list_meetings)).check(matches(isDisplayed()));
+        // Click on the first meeting in the list
+        onView(withId(R.id.list_meetings)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        // Check if meeting details page is displayed
+        onView(withId(R.id.meeting_page)).check(matches(isDisplayed()));
+        // Check if meeting date matches with set date in filter by date option
+        onView(withId(R.id.meeting_detail_date)).toString().contains("Le 19/05/2022");
+    }
+
+    /**
+     * When we add a meeting, the item is in the meetings list
      * DONT' RUN this test alone (fails because includes item count with item deleted before)
      */
     @Test
-    public void myMeetingsDetails_editingNewMeetingAction_shouldUpdateItem() {
+    public void myMeetingsDetails_editingMeetingAction_shouldUpdateItem() {
         // Click on the fifth item in the meetings list
         onView(withId(R.id.list_meetings))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(4, click()));
@@ -228,7 +260,7 @@ public class MeetingsListTest {
         // Click on the date field
         onView(withId(R.id.add_date_input))
                 .perform(click());
-        // Set meeting date (day / mounth / year)
+        // Set meeting date (day / month / year)
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022,  5, 19));
         // Click OK button
         onView(withId(android.R.id.button1)).perform(click());
@@ -236,12 +268,12 @@ public class MeetingsListTest {
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(14,  0));
         // Click OK button
         onView(withId(android.R.id.button1)).perform(click());
-        // Click on the creation button to add this new meeting
+        // Click on the update button to update meeting with new date set
         onView(withId(R.id.create))
                 .perform(scrollTo(), click());
         // Check if meeting details page is displayed
         onView(withId(R.id.meeting_page)).check(matches(isDisplayed()));
-        // Check if meeting data (here date) is displayed and formatted in the right field
+        // Check if meeting data (here new date) is displayed and formatted in the right field
         onView(withId(R.id.meeting_detail_date)).check(matches(withText("Le 19/05/2022 à 14:00")));
     }
 }
