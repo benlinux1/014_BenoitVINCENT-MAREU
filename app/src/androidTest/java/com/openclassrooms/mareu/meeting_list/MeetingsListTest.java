@@ -1,10 +1,12 @@
 
 package com.openclassrooms.mareu.meeting_list;
 
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
@@ -56,7 +58,7 @@ public class MeetingsListTest {
      * We ensure that our recyclerview is displaying at least on item
      */
     @Test
-    public void myNeighboursList_shouldNotBeEmpty() {
+    public void myMeetingsList_shouldNotBeEmpty() {
         // First scroll to the position that needs to be matched and click on it.
         onView(ViewMatchers.withId(R.id.list_meetings))
                 .check(matches(hasMinimumChildCount(1)));
@@ -67,7 +69,7 @@ public class MeetingsListTest {
      */
     @Test
     public void myMeetingsList_deleteMeetingAction_shouldRemoveItem() {
-        // Check neighbours list count (actual is 7)
+        // Check meetings list count (actual is 7)
         onView(ViewMatchers.withId(R.id.list_meetings)).check(withItemCount(ITEMS_COUNT));
         // When perform a click on a delete icon
         onView(ViewMatchers.withId(R.id.list_meetings))
@@ -81,10 +83,10 @@ public class MeetingsListTest {
      */
     @Test
     public void myMeetingsList_clickOnClickMeetingAction_shouldOpenMeetingDetails() {
-        // Click on the third item in the neighbour list
+        // Click on the third item in the meetings list
         onView(withId(R.id.list_meetings))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
-        // Check if neighbour's profile is displayed
+        // Check if meeting details page is displayed
         onView(withId(R.id.meeting_page)).check(matches(isDisplayed()));
     }
 
@@ -92,14 +94,43 @@ public class MeetingsListTest {
      * When we click on a meeting in the list, the meeting's data is displayed in the right fields
      */
     @Test
-    public void myMeetingList_clickOnMeeting_shouldDisplayMeetingDataInDetailView() {
-        // Click on the fifth item in the neighbour list
+    public void myMeetingsList_clickOnMeeting_shouldDisplayMeetingDataInDetailView() {
+        // Click on the fifth item in the meetings list
         onView(withId(R.id.list_meetings))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(4, click()));
-        // Check if meeting data is displayed on his profile's page
+        // Check if meeting data is displayed on the details page
         Meeting meetingPosition = DI.getMeetingApiService().getMeetings().get(4);
         onView(withId(R.id.meeting_detail_location_room)).check(matches(withText("Salle \"" + meetingPosition.getRoomName() +"\"")));
         onView(withId(R.id.meeting_detail_second_title)).check(matches(withText(meetingPosition.getSubject())));
         onView(withId(R.id.meeting_detail_description)).check(matches(withText(meetingPosition.getDescription())));
     }
+
+
+    /**
+     * When we click on ADD BUTTON, the new meeting form is displayed
+     */
+    @Test
+    public void myMeetingsList_addMeetingAction_shouldOpenAddMeetingForm() {
+        // Check meetings list count (actual is 7)
+        onView(ViewMatchers.withId(R.id.list_meetings)).check(withItemCount(ITEMS_COUNT));
+        // When perform a click on the add button
+        onView(withId(R.id.add_meeting)).perform(click());
+        // Check if meeting form is displayed
+        onView(withId(R.id.meeting_fields_page)).check(matches(isDisplayed()));
+    }
+
+    /**
+     * When we click on EDIT BUTTON in meeting details page, the edit meeting form is displayed
+     */
+    @Test
+    public void myMeetingsList_editMeetingAction_shouldOpenEditMeetingForm() {
+        // Check meetings list count (actual is 7)
+        onView(ViewMatchers.withId(R.id.meeting_page));
+        // When perform a click on the add button
+        onView(withId(R.id.meeting_detail_update_button)).perform(click());
+
+        // Check if meeting form is displayed
+        onView(withId(R.id.meeting_fields_page)).check(matches(isDisplayed()));
+    }
+
 }
