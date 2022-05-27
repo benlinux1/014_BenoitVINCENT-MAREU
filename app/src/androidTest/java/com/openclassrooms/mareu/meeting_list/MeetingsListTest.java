@@ -208,10 +208,10 @@ public class MeetingsListTest {
     }
 
     /**
-     * When we add a meeting, the item is in the meetings list
+     * When we use filtering by date option in menu, the meeting list contains meeting with the right date
      */
     @Test
-    public void myMeetingsList_filteringByDateMeetingAction_shouldUpdateItem() {
+    public void myMeetingsList_filteringByDateMeetingAction_shouldDisplayItemsWithRightDate() {
         // Check meetings list count
         onView(withId(R.id.list_meetings)).check(withItemCount(ITEMS_COUNT));
         // When we click on menu option
@@ -228,11 +228,39 @@ public class MeetingsListTest {
         // Check if meeting details page is displayed
         onView(withId(R.id.list_meetings)).check(matches(isDisplayed()));
         // Click on the first meeting in the list
-        onView(withId(R.id.list_meetings)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        onView(withId(R.id.list_meetings)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         // Check if meeting details page is displayed
         onView(withId(R.id.meeting_page)).check(matches(isDisplayed()));
         // Check if meeting date matches with set date in filter by date option
         onView(withId(R.id.meeting_detail_date)).toString().contains("Le 19/05/2022");
+    }
+
+    /**
+     * When we use filtering by room name option in menu, the meeting list contains meeting with the right rooms
+     */
+    @Test
+    public void myMeetingsList_filteringByRoomNameMeetingAction_shouldDisplayMeetingsWithRightRoomName() {
+        // Check meetings list count
+        onView(withId(R.id.list_meetings)).check(withItemCount(ITEMS_COUNT));
+        // When we click on menu option
+        try {
+            onView(withId(R.id.filter_room)).perform(click());
+        } catch (NoMatchingViewException e) {
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getTargetContext());
+            onView(withText(R.string.menu_filter_room)).perform(click());
+        }
+        String room = "Mario";
+        onView(withText(room)).perform(click());
+        // Click OK button
+        onView(withId(android.R.id.button1)).perform(click());
+        // Check if meeting details page is displayed
+        onView(withId(R.id.list_meetings)).check(matches(isDisplayed()));
+        // Click on the first meeting in the list
+        onView(withId(R.id.list_meetings)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        // Check if meeting details page is displayed
+        onView(withId(R.id.meeting_page)).check(matches(isDisplayed()));
+        // Check if meeting room matches with set room in filter by room name option
+        onView(withId(R.id.meeting_detail_location_room)).check(matches(withText("Salle \"Mario\"")));
     }
 
     /**
