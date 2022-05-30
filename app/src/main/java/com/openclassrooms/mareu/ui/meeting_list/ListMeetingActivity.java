@@ -50,8 +50,7 @@ public class ListMeetingActivity extends AppCompatActivity {
 
     private List<Meeting> mMeetingsList = new ArrayList<>();
     private MeetingApiService mApiService = DI.getMeetingApiService();
-    MyMeetingRecyclerViewAdapter adapter;
-
+    private MyMeetingRecyclerViewAdapter adapter;
 
     /**
      * Create menu with 3 options (filter by date / filter by room name / see all)
@@ -113,7 +112,6 @@ public class ListMeetingActivity extends AppCompatActivity {
                 mMeetingsList = mApiService.getMeetingsFilteredListByDate(cal.getTime());
                 adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
                 mRecyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
                 showTextIfMeetingListEmpty();
             }
         };
@@ -157,7 +155,7 @@ public class ListMeetingActivity extends AppCompatActivity {
                 mMeetingsList = mApiService.getMeetingsListFilteredByRoomName((rooms[0].replace("[]", "")));
                 adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
                 mRecyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                adapter.initList(mMeetingsList);
                 showTextIfMeetingListEmpty();
             }
         });
@@ -209,6 +207,7 @@ public class ListMeetingActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         mMeetingsList.addAll(mApiService.getMeetings());
         adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+        adapter.initList(mMeetingsList);
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

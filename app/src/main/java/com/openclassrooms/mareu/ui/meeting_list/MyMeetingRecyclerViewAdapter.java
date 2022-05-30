@@ -34,8 +34,9 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
     private List<Meeting> mMeetings;
     private MeetingApiService mApiService;
 
-    public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
-        mMeetings = items;
+
+    public MyMeetingRecyclerViewAdapter(List<Meeting> meetings) {
+        mMeetings = meetings;
     }
 
     @NonNull
@@ -61,10 +62,11 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
             @Override
             public void onClick(View v) {
                 // Delete meeting from global List
+                mMeetings.remove(meeting);
                 mApiService = DI.getMeetingApiService();
                 mApiService.deleteMeeting(meeting);
                 Toast.makeText(v.getContext(), "La réunion intitulée \"" + meeting.getSubject() + "\" a bien été supprimée", Toast.LENGTH_LONG).show();
-                initList();
+                initList(mMeetings);
             }
         });
 
@@ -79,8 +81,8 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         });
     }
 
-    private void initList() {
-        mMeetings = mApiService.getMeetings();
+    public void initList(List<Meeting> mMeetings) {
+        this.mMeetings = mMeetings;
         notifyDataSetChanged();
     }
 
