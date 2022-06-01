@@ -1,7 +1,6 @@
-package com.openclassrooms.mareu.service;
+package com.openclassrooms.mareu.utility;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,15 +8,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import com.openclassrooms.mareu.ui.meeting_list.AddMeetingActivity;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateTimeService {
+public class DateTimeUtility {
 
     private static Calendar date;
 

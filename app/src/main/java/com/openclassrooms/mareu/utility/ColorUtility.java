@@ -1,8 +1,8 @@
-package com.openclassrooms.mareu.service;
+package com.openclassrooms.mareu.utility;
 
 import java.util.Random;
 
-public class ColorService {
+public class ColorUtility {
 
     /**
      * Generate a random color

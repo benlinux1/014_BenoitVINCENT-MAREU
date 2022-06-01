@@ -13,7 +13,6 @@ import com.openclassrooms.mareu.service.MeetingApiService;
 
 import java.util.ArrayList;
 
-
 public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Participant> participants;

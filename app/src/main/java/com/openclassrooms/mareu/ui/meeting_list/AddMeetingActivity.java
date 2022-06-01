@@ -27,10 +27,10 @@ import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.model.Participant;
-import com.openclassrooms.mareu.service.DateTimeService;
+import com.openclassrooms.mareu.utility.DateTimeUtility;
 import com.openclassrooms.mareu.service.MeetingApiService;
-import com.openclassrooms.mareu.service.ValidationService;
-import com.openclassrooms.mareu.service.ColorService;
+import com.openclassrooms.mareu.utility.ValidationUtility;
+import com.openclassrooms.mareu.utility.ColorUtility;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -87,11 +87,11 @@ public class AddMeetingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mApiService = DI.getMeetingApiService();
 
-        ValidationService.checkIfRoomIsChecked(mFirstGroup=findViewById(R.id.radioGroup_1_to_5), mSecondGroup=findViewById(R.id.radioGroup_6_to_10));
+        ValidationUtility.checkIfRoomIsChecked(mFirstGroup=findViewById(R.id.radioGroup_1_to_5), mSecondGroup=findViewById(R.id.radioGroup_6_to_10));
         setMeetingColor();
-        ValidationService.textInputValidation(subject, subjectLayout, addButton);
+        ValidationUtility.textInputValidation(subject, subjectLayout, addButton);
         checkIfEmailIsValid(participantsLayout, participantInput, addButton);
-        ValidationService.textInputValidation(descriptionInput, descriptionInputLayout, addButton);
+        ValidationUtility.textInputValidation(descriptionInput, descriptionInputLayout, addButton);
         listenToDate();
     }
 
@@ -116,7 +116,7 @@ public class AddMeetingActivity extends AppCompatActivity {
     private void listenToDate() {
         date.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                DateTimeService.setDate(date, AddMeetingActivity.this);
+                DateTimeUtility.setDate(date, AddMeetingActivity.this);
             }
         });
     }
@@ -140,7 +140,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                 mailEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
+                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.ACTION_DOWN) && (ValidationUtility.validateEmail(s.toString(), mailInputLayout))) {
                             Participant participant = new Participant(s.toString());
                             addParticipant(participant);
                             showParticipantsList();
@@ -202,7 +202,7 @@ public class AddMeetingActivity extends AppCompatActivity {
      * Set a random meeting color
      */
     private void setMeetingColor() {
-        mAvatarColor = ColorService.randomColor();
+        mAvatarColor = ColorUtility.randomColor();
         avatar.setColorFilter(Color.parseColor(mAvatarColor));
     }
 
@@ -249,7 +249,7 @@ public class AddMeetingActivity extends AppCompatActivity {
                     System.currentTimeMillis(), //meeting id
                     Objects.requireNonNull(subjectLayout.getEditText()).getText().toString(), //meeting subject
                     mAvatarColor, //meeting color
-                    DateTimeService.getDate(date.getText().toString()), //meeting date
+                    DateTimeUtility.getDate(date.getText().toString()), //meeting date
                     getRoomValue(), //meeting room
                     getEmailList(), //meeting participants
                     Objects.requireNonNull(descriptionInputLayout.getEditText()).getText().toString() //meeting description
@@ -257,7 +257,7 @@ public class AddMeetingActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(subjectLayout, participantsList, participantsLayout, descriptionInputLayout)) {
+        if (checkIfParticipantListIsNotEmpty() && ValidationUtility.validateAllFields(subjectLayout, participantsList, participantsLayout, descriptionInputLayout)) {
             assert meeting != null;
             if (mApiService.checkIfRoomIsFree(meeting.getDate(), meeting.getRoomName(), System.currentTimeMillis())) {
                 mApiService.createMeeting(meeting);

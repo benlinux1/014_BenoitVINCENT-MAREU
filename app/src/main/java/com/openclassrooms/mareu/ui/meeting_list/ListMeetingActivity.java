@@ -45,7 +45,6 @@ public class ListMeetingActivity extends AppCompatActivity {
     @BindView(R.id.meeting_list_empty_text)
     TextView emptyMeetingList;
 
-    private List<Meeting> mMeetingsList = new ArrayList<>();
     private final MeetingApiService mApiService = DI.getMeetingApiService();
     private MyMeetingRecyclerViewAdapter adapter;
 
@@ -84,12 +83,10 @@ public class ListMeetingActivity extends AppCompatActivity {
      * Add all meetings to list in order to see full list)
      */
     private void resetFilter() {
-        mMeetingsList.clear();
-        mMeetingsList.addAll(mApiService.getMeetings());
-        adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+        List<Meeting> mMeetingsList = mApiService.getMeetings();
+        adapter.initList(mMeetingsList);
         mRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        showTextIfMeetingListEmpty();
+        showTextIfMeetingListEmpty(mMeetingsList);
     }
 
     /**
@@ -105,11 +102,10 @@ public class ListMeetingActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 Calendar cal = Calendar.getInstance(Locale.FRANCE);
                 cal.set(i, i1, i2);
-                mMeetingsList.clear();
-                mMeetingsList = mApiService.getMeetingsFilteredListByDate(cal.getTime());
-                adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+                List<Meeting> mMeetingsList = mApiService.getMeetingsFilteredListByDate(cal.getTime());
+                adapter.initList(mMeetingsList);
                 mRecyclerView.setAdapter(adapter);
-                showTextIfMeetingListEmpty();
+                showTextIfMeetingListEmpty(mMeetingsList);
             }
         };
 
@@ -148,11 +144,10 @@ public class ListMeetingActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mMeetingsList.clear();
-                mMeetingsList = mApiService.getMeetingsListFilteredByRoomName((rooms[0].replace("[]", "")));
-                adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+                List<Meeting> mMeetingsList = mApiService.getMeetingsListFilteredByRoomName((rooms[0].replace("[]", "")));
+                adapter.initList(mMeetingsList);
                 mRecyclerView.setAdapter(adapter);
-                showTextIfMeetingListEmpty();
+                showTextIfMeetingListEmpty(mMeetingsList);
             }
         });
 
@@ -187,8 +182,8 @@ public class ListMeetingActivity extends AppCompatActivity {
     /**
      * Show "No result found" if meeting list is empty
      */
-    public void showTextIfMeetingListEmpty() {
-        if (mMeetingsList.size() == 0) {
+    public void showTextIfMeetingListEmpty(List<Meeting> meetingList) {
+        if (meetingList.size() == 0) {
             emptyMeetingList.setVisibility(View.VISIBLE);
         } else {
             emptyMeetingList.setVisibility(View.GONE);
@@ -201,10 +196,17 @@ public class ListMeetingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_meeting);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        mMeetingsList.addAll(mApiService.getMeetings());
+        setMeetingsList();
+    }
+
+    /**
+     * Init meetings recyclerView
+     */
+    private void setMeetingsList() {
+        List<Meeting> mMeetingsList = mApiService.getMeetings();
         adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
         mRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        showTextIfMeetingListEmpty(mMeetingsList);
     }
 
     /**

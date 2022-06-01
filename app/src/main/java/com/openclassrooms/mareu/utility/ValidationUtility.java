@@ -1,21 +1,15 @@
-package com.openclassrooms.mareu.service;
+package com.openclassrooms.mareu.utility;
 
-import android.app.Activity;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputLayout;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-
-import com.openclassrooms.mareu.model.Meeting;
 
 
-public class ValidationService {
+public class ValidationUtility {
 
     /**
      * validate text field with regex & set input layout error
@@ -71,7 +65,7 @@ public class ValidationService {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (ValidationService.validateTextInput(textInputLayout.getEditText().getText().toString(), textInputLayout)) {
+                    if (ValidationUtility.validateTextInput(textInputLayout.getEditText().getText().toString(), textInputLayout)) {
                         textInputLayout.setError(null);
                         actionButton.setEnabled(true);
                     } else {

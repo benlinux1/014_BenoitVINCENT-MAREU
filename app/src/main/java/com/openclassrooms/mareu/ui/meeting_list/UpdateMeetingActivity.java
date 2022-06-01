@@ -26,9 +26,9 @@ import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.model.Participant;
-import com.openclassrooms.mareu.service.DateTimeService;
+import com.openclassrooms.mareu.utility.DateTimeUtility;
 import com.openclassrooms.mareu.service.MeetingApiService;
-import com.openclassrooms.mareu.service.ValidationService;
+import com.openclassrooms.mareu.utility.ValidationUtility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,10 +74,10 @@ public class UpdateMeetingActivity extends AppCompatActivity {
         setMeetingInfo(meeting);
         initParticipantsRecyclerView();
         showParticipantsList();
-        ValidationService.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
+        ValidationUtility.checkIfRoomIsChecked(findViewById(R.id.radioGroup_1_to_5), findViewById(R.id.radioGroup_6_to_10));
         setMeetingRoomChecked(meeting);
-        ValidationService.textInputValidation(mMeetingSubject, mMeetingSubjectLayout, mUpdateButton);
-        ValidationService.textInputValidation(mMeetingDescription, mMeetingDescriptionLayout, mUpdateButton);
+        ValidationUtility.textInputValidation(mMeetingSubject, mMeetingSubjectLayout, mUpdateButton);
+        ValidationUtility.textInputValidation(mMeetingDescription, mMeetingDescriptionLayout, mUpdateButton);
         checkIfEmailIsValid(mParticipantsLayout, mParticipantInput, mUpdateButton);
         listenToDate();
         setUpdateButtonListener();
@@ -162,7 +162,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
     private void listenToDate() {
         mMeetingDate.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                DateTimeService.setDate(mMeetingDate, UpdateMeetingActivity.this);
+                DateTimeUtility.setDate(mMeetingDate, UpdateMeetingActivity.this);
             }
         });
     }
@@ -211,7 +211,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                 mailEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (ValidationService.validateEmail(s.toString(), mailInputLayout))) {
+                        if ((actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (ValidationUtility.validateEmail(s.toString(), mailInputLayout))) {
                             Participant participant = new Participant(s.toString());
                             addParticipant(participant);
                         }
@@ -326,7 +326,7 @@ public class UpdateMeetingActivity extends AppCompatActivity {
      * Send form values to model in order to update meeting after fields validation. Then close activity.
      */
     void updateMeeting() throws ParseException {
-        if (checkIfParticipantListIsNotEmpty() && ValidationService.validateAllFields(mMeetingSubjectLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
+        if (checkIfParticipantListIsNotEmpty() && ValidationUtility.validateAllFields(mMeetingSubjectLayout, mMeetingParticipants, mParticipantsLayout, mMeetingDescriptionLayout)) {
             mMeetingId = getMeetingInfo().getId();
             mApiService = DI.getMeetingApiService();
             // loop in meetings list
@@ -334,8 +334,8 @@ public class UpdateMeetingActivity extends AppCompatActivity {
                 // when meeting is found
                 if (meeting.getId() == mMeetingId) {
                     // check if room is free at the selected date & replace meeting data
-                    if (mApiService.checkIfRoomIsFree(DateTimeService.getDate(mMeetingDateLayout.getEditText().getText().toString()), getRoomValue(), mMeetingId)) {
-                        meeting.setDate(DateTimeService.getDate(mMeetingDateLayout.getEditText().getText().toString()));
+                    if (mApiService.checkIfRoomIsFree(DateTimeUtility.getDate(mMeetingDateLayout.getEditText().getText().toString()), getRoomValue(), mMeetingId)) {
+                        meeting.setDate(DateTimeUtility.getDate(mMeetingDateLayout.getEditText().getText().toString()));
                         meeting.setSubject(mMeetingSubjectLayout.getEditText().getText().toString());
                         meeting.setRoomName(getRoomValue());
                         meeting.setParticipants(getEmailList());
