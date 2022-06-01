@@ -17,8 +17,18 @@
         <item name="android:paddingBottom">12dp</item>
     </style>
 
+    <style name="cardView_tab" >
+        <item name="background">@color/colorWhite</item>
+        <item name="elevation">4dp</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginEnd">24dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
+    </style>
+
     <style name="cardTitle" >
         <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginStart">20dp</item>
     </style>
 
     <style name="cardText" >
@@ -28,10 +38,25 @@
         <item name="android:drawablePadding">12dp</item>
     </style>
 
+    <style name="cardText_tab" >
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">20dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+    </style>
+
+    <style name="radiobutton_tab" >
+        <item name="android:textSize">20sp</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">28sp</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
