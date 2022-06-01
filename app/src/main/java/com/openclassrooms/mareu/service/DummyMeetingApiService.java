@@ -83,12 +83,12 @@ public class DummyMeetingApiService implements MeetingApiService {
      */
     @Override
     public List<Meeting> getMeetingsListFilteredByRoomName(String roomName) {
-        List<Meeting> filteredMeetingRooms = new ArrayList<>();
+        List<Meeting> filteredMeetingsByRoomName = new ArrayList<>();
         for (int i = 0; i < meetings.size(); i++)
             if (meetings.get(i).getRoomName().equals(roomName)) {
-                filteredMeetingRooms.add(meetings.get(i));
+                filteredMeetingsByRoomName.add(meetings.get(i));
             }
-        return filteredMeetingRooms;
+        return filteredMeetingsByRoomName;
     }
 
     /**
