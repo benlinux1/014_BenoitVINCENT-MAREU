@@ -23,11 +23,8 @@ import android.widget.Toast;
 
 import com.openclassrooms.mareu.R;
 import com.openclassrooms.mareu.di.DI;
-import com.openclassrooms.mareu.events.DeleteMeetingEvent;
 import com.openclassrooms.mareu.model.Meeting;
 import com.openclassrooms.mareu.service.MeetingApiService;
-
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +46,7 @@ public class ListMeetingActivity extends AppCompatActivity {
     TextView emptyMeetingList;
 
     private List<Meeting> mMeetingsList = new ArrayList<>();
-    private MeetingApiService mApiService = DI.getMeetingApiService();
+    private final MeetingApiService mApiService = DI.getMeetingApiService();
     private MyMeetingRecyclerViewAdapter adapter;
 
     /**

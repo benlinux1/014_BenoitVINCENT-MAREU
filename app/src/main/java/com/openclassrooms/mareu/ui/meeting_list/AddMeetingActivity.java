@@ -1,9 +1,5 @@
 package com.openclassrooms.mareu.ui.meeting_list;
 
-import static com.openclassrooms.mareu.service.DateTimeService.getDate;
-
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.button.MaterialButton;
@@ -20,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -38,9 +33,7 @@ import com.openclassrooms.mareu.service.ValidationService;
 import com.openclassrooms.mareu.service.ColorService;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -81,9 +74,9 @@ public class AddMeetingActivity extends AppCompatActivity {
     private String mAvatarColor;
     private RadioGroup mFirstGroup;
     private RadioGroup mSecondGroup;
-    private boolean isChecking = true;
-    private int mCheckedId = R.id.radioButton_room1;
-    private ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
+    private final boolean isChecking = true;
+    private final int mCheckedId = R.id.radioButton_room1;
+    private final ArrayList<Participant> arrayOfParticipants = new ArrayList<>();
     private Date mMeetingDate;
 
     @Override

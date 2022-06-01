@@ -94,7 +94,7 @@
                     android:drawableStart="@drawable/ic_baseline_group_24"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/meeting_detail_location_room"
-                    tools:text="@string/meeting_members" />
+                    tools:text="@string/add_member_title" />
 
             </android.support.constraint.ConstraintLayout>
 

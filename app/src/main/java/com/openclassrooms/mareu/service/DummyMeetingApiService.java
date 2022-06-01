@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class DummyMeetingApiService implements MeetingApiService {
 
-    private List<Meeting> meetings = DummyMeetingGenerator.generateNeighbours();
+    private final List<Meeting> meetings = DummyMeetingGenerator.generateNeighbours();
 
     /**
      * {@inheritDoc}
@@ -107,13 +107,17 @@ public class DummyMeetingApiService implements MeetingApiService {
             Calendar meetingDate = Calendar.getInstance();
             meetingDate.setTime(meetings.get(i).getDate());
             // Set meeting max duration (1 hour & 59 minutes)
-            int durationHour = meetingDate.get(Calendar.HOUR_OF_DAY)+1;
-            int durationMinute = meetingDate.get(Calendar.MINUTE)+59;
+            int maxDurationHour = meetingDate.get(Calendar.HOUR_OF_DAY)+1;
+            int maxDurationMinute = meetingDate.get(Calendar.MINUTE)+59;
+            int minDurationHour = meetingDate.get(Calendar.HOUR_OF_DAY)-1;
+            int minDurationMinute = meetingDate.get(Calendar.MINUTE)-59;
             // Set same time conditions to compare selected dateTime and all meetings dateTime
             boolean sameTime = selectedDate.get(Calendar.DAY_OF_YEAR) == meetingDate.get(Calendar.DAY_OF_YEAR) &&
                 selectedDate.get(Calendar.YEAR) == meetingDate.get(Calendar.YEAR) &&
                 (selectedDate.get(Calendar.HOUR_OF_DAY) >= meetingDate.get(Calendar.HOUR_OF_DAY)
-                        && (selectedDate.get(Calendar.HOUR_OF_DAY) <= durationHour && selectedDate.get(Calendar.MINUTE) <= durationMinute));
+                        && (selectedDate.get(Calendar.HOUR_OF_DAY) <= maxDurationHour && selectedDate.get(Calendar.MINUTE) <= maxDurationMinute))
+                        || (selectedDate.get(Calendar.HOUR_OF_DAY) <= meetingDate.get(Calendar.HOUR_OF_DAY)
+                    && (selectedDate.get(Calendar.HOUR_OF_DAY) >= minDurationHour && selectedDate.get(Calendar.MINUTE) >= minDurationMinute));
             boolean sameRoom = meetings.get(i).getRoomName().equals(roomName);
             boolean differentId = meetings.get(i).getId() != exceptionId;
             if (sameRoom && sameTime && differentId) {

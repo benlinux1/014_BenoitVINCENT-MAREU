@@ -3,15 +3,11 @@ package com.openclassrooms.mareu.meeting_list;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -39,14 +35,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChild
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.openclassrooms.mareu.utils.RecyclerViewItemCountAssertion.withItemCount;
 import static org.hamcrest.core.IsNull.notNullValue;
-
-import java.util.Calendar;
-
 
 /**
  * Test class for list of neighbours
@@ -55,7 +47,7 @@ import java.util.Calendar;
 public class MeetingsListTest {
 
 
-    private int ITEMS_COUNT = 7;
+    private final int ITEMS_COUNT = 7;
 
     private ListMeetingActivity mActivity;
 
