@@ -152,7 +152,6 @@ public class ListMeetingActivity extends AppCompatActivity {
                 mMeetingsList = mApiService.getMeetingsListFilteredByRoomName((rooms[0].replace("[]", "")));
                 adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
                 mRecyclerView.setAdapter(adapter);
-                adapter.initList(mMeetingsList);
                 showTextIfMeetingListEmpty();
             }
         });
@@ -188,7 +187,7 @@ public class ListMeetingActivity extends AppCompatActivity {
     /**
      * Show "No result found" if meeting list is empty
      */
-    private void showTextIfMeetingListEmpty() {
+    public void showTextIfMeetingListEmpty() {
         if (mMeetingsList.size() == 0) {
             emptyMeetingList.setVisibility(View.VISIBLE);
         } else {
@@ -204,7 +203,6 @@ public class ListMeetingActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         mMeetingsList.addAll(mApiService.getMeetings());
         adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
-        adapter.initList(mMeetingsList);
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
