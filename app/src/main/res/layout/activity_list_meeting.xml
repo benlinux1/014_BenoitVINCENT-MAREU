@@ -40,13 +40,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
             app:layoutManager="LinearLayoutManager"
-            tools:context=".ui.meeting_list.MeetingFragment"
             app:layout_constraintTop_toBottomOf="@id/appbar"
+            tools:context=".ui.meeting_list.MeetingFragment"
+            tools:layout_editor_absoluteX="0dp"
             tools:listitem="@layout/fragment_meeting" />
-
 
 
     </android.support.constraint.ConstraintLayout>
