@@ -72,9 +72,9 @@ Notre équipe : BenLinux & FranckBlack
 # ENGLISH VERSION
 (version française en 1ère partie de la documentation)
 
-# Entrevoisins
+# Maréu
 
-This repository contains a mini app for the **DA Android** 4th projet, untitled **MaRéu**
+This repository contains a mini app for the **DA Android** 4th projet, untitled **MaRéu**.
 
 ## Technologies
 - 100% JAVA, this project was made with Android Studio IDE.
@@ -106,11 +106,10 @@ This app allow you to :
 
 - Display global meetings list
 - Consult each meeting's profile clicking on his name or avatar
-- Add a meeting to your favorites list
-- Display your favorites list
-- Delete a meeting from your favorites list
-- Add a new meeting
-- Remove a meeting from global list
+- Add a meeting to global list
+- Delete a meeting from global list
+- Update an existing meeting
+- Filter meetings in global list, by date, ou according a selected meeting room.
 
 ![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/170277679-27b594b3-14e9-4507-9609-08f1dfa39dcc.png)
 
@@ -126,7 +125,7 @@ It was also tested in real conditions, on a physical device Samsung Galaxy S20.
 
 ## Contribute to the project
 
-Entrevoisins is an open source project. Feel free to fork the source and contribute with your own features.
+Maréu is an open source project. Feel free to fork the source and contribute with your own features.
 
 ## Authors
 
