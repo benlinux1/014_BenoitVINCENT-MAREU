@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -199,12 +200,17 @@ public class ListMeetingActivity extends AppCompatActivity {
         setMeetingsList();
     }
 
+
+
     /**
      * Init meetings recyclerView
      */
     private void setMeetingsList() {
         List<Meeting> mMeetingsList = mApiService.getMeetings();
         adapter = new MyMeetingRecyclerViewAdapter(mMeetingsList);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(adapter);
         showTextIfMeetingListEmpty(mMeetingsList);
     }
