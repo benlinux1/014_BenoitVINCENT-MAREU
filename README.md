@@ -1,4 +1,4 @@
-![da-android-maréu](https://user-images.githubusercontent.com/78255467/170267450-878dcfea-f86c-4ae3-a39e-5262c7a67adf.svg)![android-app-100_-java](https://github.com/benlinux1/DA_ANDROID_MAREU/assets/78255467/1d9ab158-0a9a-4789-9d3c-70e12a3087c0)
+![benoit-vincent-mareu](https://github.com/benlinux1/DA_ANDROID_MAREU/assets/78255467/c42fc4c5-5ec4-4ddf-8d3c-f370ad512ec6)![android-app-100_-java](https://github.com/benlinux1/DA_ANDROID_MAREU/assets/78255467/1d9ab158-0a9a-4789-9d3c-70e12a3087c0)
 
 # VERSION FRANCAISE
 (English translation in the 2nd part of the documentation below)
@@ -65,7 +65,7 @@ Notre équipe : BenLinux & FranckBlack
 
 ============================================================================================
 
-![da-android-maréu](https://user-images.githubusercontent.com/78255467/170267450-878dcfea-f86c-4ae3-a39e-5262c7a67adf.svg)![android-app-100_-java](https://github.com/benlinux1/DA_ANDROID_MAREU/assets/78255467/1d9ab158-0a9a-4789-9d3c-70e12a3087c0)
+![benoit-vincent-mareu](https://github.com/benlinux1/DA_ANDROID_MAREU/assets/78255467/c42fc4c5-5ec4-4ddf-8d3c-f370ad512ec6)![android-app-100_-java](https://github.com/benlinux1/DA_ANDROID_MAREU/assets/78255467/1d9ab158-0a9a-4789-9d3c-70e12a3087c0)
 
 # ENGLISH VERSION
 (version française en 1ère partie de la documentation)
