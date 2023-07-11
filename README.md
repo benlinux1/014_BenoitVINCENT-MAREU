@@ -133,7 +133,7 @@ It was also tested in real conditions, on a physical device Samsung Galaxy S20.
 
 ![Sans titre-1](https://user-images.githubusercontent.com/78255467/170271169-7485e9fd-6986-4aca-82a2-237066fd9940.png)
 
-Next the app will compile in Android Studio
+Next the app will compile in Android Studio.
 
 
 ## Contribute to the project
