@@ -92,20 +92,13 @@ Notre équipe : BenLinux & FranckBlack
 
 This repository contains a mini app for the **DA Android** 4th projet, untitled **MaRéu**.
 
+As the company grows, meeting management becomes a key issue for employees.
+
+The company therefore wishes to create a meeting management application, Maréu, which can be used internally by all employees.
+
 
 ## Technologies
-- 100% JAVA, this project was made with Android Studio IDE.
-
-
-## Use / How to launch app
-
-You can use this app with an emulator, for a choosen mobile simulation.
-To do that, go to the tools ribbon in the right part of the window and click "create device". Then, follow the instructions on screen.
-
-You can also use this app with your own smartphone, choosing "physical" option in device manager, 
-Then, launch app clicking on the green triangle button "Run", like in this example :
-
-![Sans titre-2](https://user-images.githubusercontent.com/78255467/163193524-89842086-ca39-475c-afc2-e39e3e586f68.png)
+- **100% JAVA**, this project was made with Android Studio IDE.
 
 
 ## Objectives and features
@@ -148,6 +141,17 @@ It was also tested in real conditions, on a physical device Samsung Galaxy S20.
 ![Sans titre-1](https://user-images.githubusercontent.com/78255467/170271169-7485e9fd-6986-4aca-82a2-237066fd9940.png)
 
 Next the app will compile in Android Studio.
+
+
+## Use / How to launch app
+
+You can use this app with an emulator, for a choosen mobile simulation.
+To do that, go to the tools ribbon in the right part of the window and click "create device". Then, follow the instructions on screen.
+
+You can also use this app with your own smartphone, choosing "physical" option in device manager, 
+Then, launch app clicking on the green triangle button "Run", like in this example :
+
+![Sans titre-2](https://user-images.githubusercontent.com/78255467/163193524-89842086-ca39-475c-afc2-e39e3e586f68.png)
 
 
 ## Contribute to the project
