@@ -10,7 +10,7 @@ Ce dépôt contient une mini-application Android intitulée **MaRéu**, réalis�
 
 Dans le cadre de la croissance de l’entreprise, la gestion des réunions devient un enjeu primordial pour les collaborateurs.
 
-L’entreprise souhaite donc créer une application de gestion de réunions, Maréu, utilisable en interne par l’ensemble des collaborateurs.
+L’entreprise souhaite donc créer une **application de gestion de réunions**, Maréu, utilisable en interne par l’ensemble des collaborateurs.
 
 
 ## Technologies
@@ -33,7 +33,7 @@ Cette applcation vous permet de/d' :
 
 ## Contraintes techniques
 
-- Gestion de l’affichage responsive sur toutes les tailles de téléphone et de tablette Android, en modes portrait et paysage.
+- Gestion de l’**affichage responsive** sur toutes les tailles de téléphone et de tablette Android, en modes portrait et paysage.
 
 
 ## Tests
@@ -94,7 +94,7 @@ This repository contains a mini app for the **DA Android** 4th projet, untitled 
 
 As the company grows, meeting management becomes a key issue for employees.
 
-The company therefore wishes to create a meeting management application, Maréu, which can be used internally by all employees.
+The company therefore wishes to create a **meeting management application**, Maréu, which can be used internally by all employees.
 
 
 ## Technologies
@@ -117,7 +117,7 @@ This app allow you to :
 
 ## Technical constraints
 
-- Responsive display management on all sizes of Android phones and tablets, in portrait and landscape modes.
+- **Responsive display management** on all sizes of Android phones and tablets, in portrait and landscape modes.
 
 
 ## Tests
