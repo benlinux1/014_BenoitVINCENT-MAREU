@@ -6,14 +6,18 @@
 
 # MaRéu
 
-Ce dépôt contient une mini-application pour le P4 du parcours **DA ANDROID**, intitulée **MaRéu**.
+Ce dépôt contient une mini-application Android intitulée **MaRéu**, réalisée pour l'entreprise ***Lamzone***.
+
+Dans le cadre de la croissance de l’entreprise, la gestion des réunions devient un enjeu primordial pour les collaborateurs.
+
+L’entreprise souhaite donc créer une application de gestion de réunions, Maréu, utilisable en interne par l’ensemble des collaborateurs.
 
 
 ## Technologies
-- 100% JAVA, ce projet a été réalisé à partir de l'IDE Android Studio.
+- **100% JAVA**, ce projet a été réalisé à partir de l'IDE Android Studio.
 
 
-## Fonctionnalités
+## Objectifs et fonctionnalités
 
 Cette applcation vous permet de/d' :
 
@@ -25,6 +29,11 @@ Cette applcation vous permet de/d' :
 - Filtrer les réunions dans la liste générale, par date, ou selon la salle sélectionnée.
 
 ![Fonctionnalités FR](https://user-images.githubusercontent.com/78255467/170277591-a668bcb3-74d9-4531-94c0-267d8e36e8e7.png)
+
+
+## Contraintes techniques
+
+- Gestion de l’affichage responsive sur toutes les tailles de téléphone et de tablette Android, en modes portrait et paysage.
 
 
 ## Tests
@@ -99,7 +108,7 @@ Then, launch app clicking on the green triangle button "Run", like in this examp
 ![Sans titre-2](https://user-images.githubusercontent.com/78255467/163193524-89842086-ca39-475c-afc2-e39e3e586f68.png)
 
 
-## Features
+## Objectives and features
 
 This app allow you to :
 
@@ -111,6 +120,11 @@ This app allow you to :
 - Filter meetings in global list, by date, ou according a selected meeting room.
 
 ![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/170277679-27b594b3-14e9-4507-9609-08f1dfa39dcc.png)
+
+
+## Technical constraints
+
+- Responsive display management on all sizes of Android phones and tablets, in portrait and landscape modes.
 
 
 ## Tests
